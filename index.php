@@ -113,14 +113,13 @@
                 $.ajax ({
                     url : 'http://localhost/Marmoraria/verificar.php',
                     method: 'POST',
-                    action: 'saveRecords',
                     data: {email: email, password: password},
                     dataType: 'json'
                 }).done(function(result){
                     if(result.redirect) {
-                        window.location.href= result.redirect;
+                        window.location.href = result.redirect;
                     } else {
-                    $('#mensagem-erro').text(result);
+                    $('#mensagem-erro').text("Email ou senha não encontrado");
                     $('#mensagem-erro').removeClass('d-none');
                     }
                 });

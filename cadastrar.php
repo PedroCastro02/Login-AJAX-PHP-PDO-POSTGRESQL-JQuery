@@ -1,5 +1,9 @@
 <?php
-    require 'config.php';
+
+    include ('connection/connection.php');
+    include 'actions/UsuarioDAOPgSQL.php';
+
+    $usuarioDao = new UsuarioDAOPgSQL($pdo);
 
     $listaCompanies = [];
     $sql = $pdo->query('SELECT * FROM companies');
@@ -80,12 +84,12 @@
 
         <div class="central-login">
             <div class="control-voltar">
-                <a href="index.html"><span class="material-symbols-outlined">arrow_back_ios</span></a>
+                <a href="index.php"><span class="material-symbols-outlined">arrow_back_ios</span></a>
             </div>
             <div class="titulo">
             <h1>CADASTRO</h1>
             </div>
-            <div class="alert alert-success d-none cotrol-input" id="mensagem-sucesso" role="alert">
+            <div class="alert alert-success d-none cotrol-input text-center" id="mensagem-sucesso" role="alert">
                 
             </div>
             <form class="login-form" id="form1" method="POST" >
@@ -174,28 +178,48 @@
         }
         $.ajax ({
             type: 'POST',
-            url : 'http://localhost/Marmoraria/usuario.class.php',
-            data: {
-                'action': saveRecords,
-                'email': email,
-                'password': password, 
-                'username': username,
-                'id_company': id_company,
-                'id_profile': id_profile,
-                'id_person': id_person
-            },
+            url : 'actions/UsuarioDAOPgSQL.php',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                action: 'saveRecords',
+                email: email,
+                password: password,
+                username: username,
+                id_company: id_company,
+                id_profile: id_profile,
+                id_person: id_person
+            }),
             success: function(data) {
                 console.log('SUCESSO')
-                $('#mensagem-sucesso').text(data, "Voltar");
-                $('#mensagem-sucesso').removeClass('d-none');
+                if(data === "Email ja esta em uso!") {
+                    
+                    $('#mensagem-sucesso').removeClass('alert alert-success');
+                    $('#mensagem-sucesso').addClass('alert alert-danger');
+                    $('#mensagem-sucesso').removeClass('d-none');
+                    $('#mensagem-sucesso').text(data);
+                } else if(data === "Username ja esta em uso!") {
+                    $('#mensagem-sucesso').removeClass('alert alert-success');
+                    $('#mensagem-sucesso').addClass('alert alert-danger');
+                    $('#mensagem-sucesso').removeClass('d-none');
+                    $('#mensagem-sucesso').text(data);
+                } else if(data === "Username e Email ja estão em uso!"){
+                    $('#mensagem-sucesso').removeClass('alert alert-success');
+                    $('#mensagem-sucesso').addClass('alert alert-danger');
+                    $('#mensagem-sucesso').removeClass('d-none');
+                    $('#mensagem-sucesso').text(data);
+                } else {
+                    $('#mensagem-sucesso').removeClass('alert alert-danger');
+                    $('#mensagem-sucesso').addClass('alert alert-success');
+                    $('#mensagem-sucesso').text(data);
+                    $('#mensagem-sucesso').removeClass('d-none');
+                } 
             },
             error: function(xhr, textStatus, error) {
                 console.log(xhr, textStatus, error);
-            }
-        })
-    }
-    
-        
+            },
+        }
+        )}
+                
     </script>
 
 </html>
