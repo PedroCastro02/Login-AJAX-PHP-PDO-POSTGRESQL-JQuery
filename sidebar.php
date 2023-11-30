@@ -34,7 +34,7 @@
 }
 .wrapper .menu-btn{
   position: absolute;
-  left: 20px;
+  left: 215px;
   top: 10px;
   background: #4a4a4a;
   color: #fff;
@@ -47,9 +47,10 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  z-index: 300;
 }
 #btn:checked ~ .menu-btn{
-  left: 247px;
+  left: 20px;
 }
 .wrapper .menu-btn i{
   position: absolute;
@@ -75,12 +76,12 @@
   height: 100%;
   width: 270px;
   overflow: hidden;
-  left: -270px;
+  left: 0;
   transition: all 0.3s ease;
   margin-left: -30px;
 }
 #btn:checked ~ #sidebar{
-  left: 0;
+  left: -270px;
 }
 #sidebar .title{
   line-height: 65px;
@@ -189,7 +190,7 @@
       <ul class="list-items">
          <li><a href="home.php"><i class="fas fa-home"></i>Home</a></li>
          <li><a href="#"><i class="fas fa-sliders-h"></i>Clients</a></li>
-         <li><a href="#"><i class="fas fa-address-book"></i>Funcionarios</a></li>
+         <li><a href="funcionarios.php"><i class="fas fa-address-book"></i>Funcionarios</a></li>
          <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
          <li><a href="#"><i class="fas fa-stream"></i>Features</a></li>
          <li><a href="#"><i class="fas fa-user"></i>About us</a></li>
