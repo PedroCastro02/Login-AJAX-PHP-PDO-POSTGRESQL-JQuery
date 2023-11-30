@@ -57,7 +57,7 @@
         border: none;
     }
     .input-submit:hover {
-        background-color: #a5acfa;
+        background-color: #eee;
     }
 </style>
 <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
@@ -72,16 +72,12 @@
             </div>
             <form class="login-form" id="form1" method="POST" action="/verificar.php">
             <div class="cotrol-input">
-                    <div class="form-floating mb-3">
-                        <input type="email" for="email" class="form-control input1" id="floatingInput" placeholder="name@example.com">
-                        <label for="floatingInput" type="email" name="email" id="email">Email address</label>
-                    </div>
+                    <label for="email" type="email" name="email">Email address</label>
+                    <input type="email" for="email" class="form-control input1" id="email">
                 </div>
                 <div class="cotrol-input">
-                    <div class="form-floating">
-                        <input for="password" type="password" class="form-control input1" id="floatingPassword" placeholder="Password">
-                        <label for="floatingPassword" type="password" name="password" id="password">Password</label>
-                    </div>
+                    <label for="password" type="password" name="password">Password</label>
+                    <input type="password" class="form-control input1" id="password">
                 </div>
                 <div class="options">
                     <a href="cadastrar.php">Cadastrar</a>
@@ -92,9 +88,10 @@
                 </div>
                 <div class="input btn mt-4">
                 <input type="submit" form="form1" class="input-submit">
-                </div>
+                
                 </form>
-
+                </div>
+                </div>
     </div>
 </body>
     
