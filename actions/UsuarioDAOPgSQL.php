@@ -38,8 +38,6 @@ class UsuarioDAOPgSQL implements UsuarioDAO {
         }
     }
     
-    
-    
     public function findAll(){
         $usuarios = array();
         $resultado = $this->pdo->query("SELECT * FROM users");

@@ -27,6 +27,7 @@
         width: 400px;
         padding: 30px 0px;
         border-radius: 20px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     }
     .cotrol-input {
         text-align: start;
@@ -46,8 +47,18 @@
     .visivel {
         visibility: hidden;
     }
-
-
+    .input1 {
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    }
+    .input-submit {
+        padding: 8px 20px;
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        border: none;
+    }
+    .input-submit:hover {
+        background-color: #a5acfa;
+    }
 </style>
 <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
 <body>
@@ -60,13 +71,17 @@
                 <div class="alert alert-danger w-75 mt-4 d-none text-center" role="alert" id="mensagem-erro"></div>
             </div>
             <form class="login-form" id="form1" method="POST" action="/verificar.php">
-                <div class="cotrol-input">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" id="email">
+            <div class="cotrol-input">
+                    <div class="form-floating mb-3">
+                        <input type="email" for="email" class="form-control input1" id="floatingInput" placeholder="name@example.com">
+                        <label for="floatingInput" type="email" name="email" id="email">Email address</label>
+                    </div>
                 </div>
                 <div class="cotrol-input">
-                    <label for="password">Senha:</label>
-                    <input type="password" name="password" id="password">
+                    <div class="form-floating">
+                        <input for="password" type="password" class="form-control input1" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword" type="password" name="password" id="password">Password</label>
+                    </div>
                 </div>
                 <div class="options">
                     <a href="cadastrar.php">Cadastrar</a>
@@ -76,9 +91,9 @@
                     </div>
                 </div>
                 <div class="input btn mt-4">
-                <input type="submit" form="form1">
-            </form>
-        </div>
+                <input type="submit" form="form1" class="input-submit">
+                </div>
+                </form>
 
     </div>
 </body>
