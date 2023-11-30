@@ -16,11 +16,19 @@ error_reporting(0);
      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
  
  </head>
- 
+ <style> 
+  .container1 {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5%;
+  }
+ </style>
  <body>
  <?php include ('sidebar.php') ?>
-  <div style="border: 2px solid red;">
-    oi
+  <div class="container1">
+      <img src="assets/imgs/MarmorariaTesteLogo.png" alt="">
   </div>
  </body>
  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"

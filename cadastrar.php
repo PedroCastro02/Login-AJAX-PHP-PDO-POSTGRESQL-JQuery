@@ -50,6 +50,7 @@
         width: 450px;
         padding: 30px 0px;
         border-radius: 20px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     }
     .cotrol-input {
         text-align: start;
@@ -76,6 +77,33 @@
         margin-left: 20px;
         margin-bottom: -35px;
     }
+    .input-submit {
+        padding-left: 10px;
+        padding-right: 10px;
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        border: none;
+        background: #0066A2;
+        color: white;
+        border-style: outset;
+        border-color: #0066A2;
+        height: 50px;
+        width: 100px;
+        font: bold15px arial,sans-serif;
+        text-shadow: none;
+    }
+    .input1 {
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        border-radius: 7px;
+        border: none;
+    }
+    .inputSelect {
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        border-radius: 7px;
+        border: none;
+        padding-top: 5px;
+        padding-bottom: 5px; 
+    }
 
 </style>
 <body>
@@ -95,32 +123,32 @@
             <form class="login-form" id="form1" method="POST" >
                 <div class="cotrol-input">
                     <label for="username">Username:</label>
-                    <input type="text" name="username" id="username">
+                    <input type="text" name="username" id="username" class="form-control input1" >
                 </div>
                 <div class="cotrol-input">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email" id="email">
+                    <label for="email" type="email" name="email">Email address</label>
+                    <input type="email" for="email" class="form-control input1" id="email">
                 </div>
                 <div class="cotrol-input">
                     <label for="password">Senha:</label>
-                    <input type="password" name="password" id="password">
+                    <input type="password" name="password" id="password" class="form-control input1" >
                 </div>
                 <div class="cotrol-input">
                     <label for="confirm-password">Confirme Sua Senha:</label>
-                    <input type="password" name="confirm-password" id="confirm-password">
+                    <input type="password" name="confirm-password" id="confirm-password" class="form-control input1" >
                 </div>
                 <div class="cotrol-input-select d-flex justify-content-between m-4">
-                <select name="id_company" id="id_company">
+                <select name="id_company" id="id_company" class="inputSelect" >
                     <?php foreach ($listaCompanies as $companie): ?>
                         <option value="<?= $companie['id']; ?>"><?= $companie['fantasy_name']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                    <select id="id_profile" name="id_profile">
+                    <select id="id_profile" name="id_profile" class="inputSelect">
                     <?php foreach ($ListaProfile as $profiles): ?>
-                        <option value="<?= $profiles['id']; ?>"><?= $profiles['profile']; ?></option>
+                        <option value="<?= $profiles['id']; ?>" ><?= $profiles['profile']; ?></option>
                         <?php endforeach; ?>
                     </select> 
-                    <select id="id_person" name="id_person">
+                    <select id="id_person" name="id_person" class="inputSelect">
                     <?php foreach ($ListaPerson as $person): ?>
                         <option value="<?= $person['id']; ?>">id Person <?= $person['id']; ?></option>
                     <?php endforeach; ?>
@@ -129,7 +157,7 @@
                 </div>
                 
                 <div class="input btn mt-2">
-                    <button type="button" onclick="saveRecords()" class="btn border-primary bg-info">Cadastrar</button>
+                    <button type="button" onclick="saveRecords()" class="btn border-primary input-submit">Cadastrar</button>
                 </div>
             </form>
         </div>
@@ -151,6 +179,7 @@
         var username = $('#username').val();
         var email = $('#email').val();
         var password = $('#password').val();
+        password.trim()
         var confirmPassword = $('#confirm-password').val();
         var id_profile = $('#id_profile').val();
         var id_company = $('#id_company').val();
@@ -158,22 +187,33 @@
         
 
         if(username == "" || email == "" || password == ""){
-            alert("preecha todos os campos");
+            $('#mensagem-sucesso').removeClass('alert alert-success');
+            $('#mensagem-sucesso').addClass('alert alert-danger');
+            $('#mensagem-sucesso').removeClass('d-none');
+            $('#mensagem-sucesso').text("Preencha todos os campos");
             return;
        }
-       if (password !== confirmPassword) {
-        alert("As senhas não coincidem.");
-        return;
-        }
 
         var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         if (!email.match(emailPattern)) {
-            alert("O e-mail inserido não é válido.");
+            $('#mensagem-sucesso').removeClass('alert alert-success');
+            $('#mensagem-sucesso').addClass('alert alert-danger');
+            $('#mensagem-sucesso').removeClass('d-none');
+            $('#mensagem-sucesso').text("O e-mail inserido não é válido.");
             return;
         }
-            
+        if (password !== confirmPassword) {
+        $('#mensagem-sucesso').removeClass('alert alert-success');
+        $('#mensagem-sucesso').addClass('alert alert-danger');
+        $('#mensagem-sucesso').removeClass('d-none');
+        $('#mensagem-sucesso').text("As senhas não coincidem.");
+        return;
+        }  
         if (password.trim().length < 3 ) {
-            alert("A senha deve conter pelo menos 3 caracteres");
+            $('#mensagem-sucesso').removeClass('alert alert-success');
+            $('#mensagem-sucesso').addClass('alert alert-danger');
+            $('#mensagem-sucesso').removeClass('d-none');
+            $('#mensagem-sucesso').text("A senha deve conter pelo menos 3 caracteres");
             return;
         }
         $.ajax ({

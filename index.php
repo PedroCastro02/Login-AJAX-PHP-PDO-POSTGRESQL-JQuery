@@ -51,14 +51,21 @@
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     }
     .input-submit {
-        padding: 8px 20px;
+        padding-left: 10px;
+        padding-right: 10px;
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
         border: none;
+        background: #0066A2;
+        color: white;
+        border-style: outset;
+        border-color: #0066A2;
+        height: 50px;
+        width: 100px;
+        font: bold15px arial,sans-serif;
+        text-shadow: none;
     }
-    .input-submit:hover {
-        background-color: #eee;
-    }
+
 </style>
 <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
 <body>
@@ -87,7 +94,7 @@
                     </div>
                 </div>
                 <div class="input btn mt-4">
-                <input type="submit" form="form1" class="input-submit">
+                    <input type="submit" form="form1" class="btn border-primary input-submit">
                 
                 </form>
                 </div>

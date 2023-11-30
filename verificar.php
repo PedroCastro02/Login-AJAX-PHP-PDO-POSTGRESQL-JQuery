@@ -16,7 +16,7 @@ if ($email && $senha) {
     if ($row) {
         // Verifica se a senha fornecida corresponde à senha armazenada no banco de dados
         if (password_verify($senha, $row['password'])) {
-            echo json_encode(array('redirect' => 'lobby.php'));
+            echo json_encode(array('redirect' => 'home.php'));
         } else {
             echo json_encode(array('error' => 'Usuário ou senha incorreta.'));
         }
