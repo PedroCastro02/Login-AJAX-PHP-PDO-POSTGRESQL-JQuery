@@ -14,6 +14,7 @@
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+   
 
     <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
 </head>
@@ -49,6 +50,7 @@
   transition: all 0.3s ease;
   z-index: 300;
 }
+
 #btn:checked ~ .menu-btn{
   left: 20px;
 }
@@ -59,7 +61,6 @@
   transition: all 0.3s ease;
 }
 .wrapper .menu-btn i.fa-times{
-  
   opacity: 0;
 }
 #btn:checked ~ .menu-btn i.fa-times{
@@ -190,7 +191,7 @@
       <ul class="list-items">
          <li><a href="home.php"><i class="fas fa-home"></i>Home</a></li>
          <li><a href="#"><i class="fas fa-sliders-h"></i>Clients</a></li>
-         <li><a href="funcionarios.php"><i class="fas fa-address-book"></i>Funcionarios</a></li>
+         <li><a href="funcionarios.php"><i class="fas fa-address-book"></i>Funcionários</a></li>
          <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
          <li><a href="#"><i class="fas fa-stream"></i>Features</a></li>
          <li><a href="#"><i class="fas fa-user"></i>About us</a></li>
