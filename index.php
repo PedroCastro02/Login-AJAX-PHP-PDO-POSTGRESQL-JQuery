@@ -27,7 +27,8 @@
         width: 400px;
         padding: 30px 0px;
         border-radius: 20px;
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        box-shadow: rgba(255, 0, 0, 0.25) 0px 54px 55px, rgba(255, 0, 0, 0.12) 0px -12px 30px, rgba(255, 0, 0, 0.12) 0px 4px 6px, rgba(255, 0, 0, 0.17) 0px 12px 13px, rgba(255, 0, 0, 0.09) 0px -3px 5px;
+
     }
     .cotrol-input {
         text-align: start;
@@ -56,10 +57,10 @@
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
         border: none;
-        background: #0066A2;
+        background: #c73232; 
         color: white;
         border-style: outset;
-        border-color: #0066A2;
+        border-color: #c73232;
         height: 50px;
         width: 100px;
         font: bold15px arial,sans-serif;
@@ -94,7 +95,7 @@
                     </div>
                 </div>
                 <div class="input btn mt-4">
-                    <input type="submit" form="form1" class="btn border-primary input-submit">
+                    <input type="submit" form="form1" class="btn input-submit">
                 
                 </form>
                 </div>
