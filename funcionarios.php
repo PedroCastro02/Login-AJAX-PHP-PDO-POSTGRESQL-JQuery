@@ -1,5 +1,7 @@
 <?php
-require 'connection/connection.php';
+include ('connection/connection.php');
+include 'actions/FuncionariosAction.php';
+
 
 $listaJoin = [];
 
@@ -25,6 +27,17 @@ if (!empty($_GET['search'])) {
     
 }
 
+$ListaTurnos = [];
+$sqlTurnos = $pdo->query('SELECT p.name FROM people p WHERE p.active = true');
+if($sqlTurnos->rowCount() > 0){
+    $ListaTurnos = $sqlTurnos->fetchAll(PDO::FETCH_ASSOC);
+}
+$ListaIdShift = [];
+$sqlIdShifts = $pdo->query('SELECT * FROM shifts');
+if($sqlIdShifts->rowCount() > 0){
+    $ListaIdShift = $sqlIdShifts->fetchAll(PDO::FETCH_ASSOC);
+}
+
 ?>
 
 <!doctype html>
@@ -37,7 +50,7 @@ if (!empty($_GET['search'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS v5.2.1 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://cdn.datatables.net/v/dt/dt-1.13.7/datatables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
@@ -169,8 +182,13 @@ if (!empty($_GET['search'])) {
                                                     <input class="inputs" type="number" name="id" id="id" readonly> 
                                                 </div>
                                                 <div class="custom-form-control d-flex flex-column  w-100">
-                                                    <label for="name">Nome<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="text" name="Nome" id="name" required>
+                                                    <label for="id_person">Nome<span class="red-asterisk">*</span></label>
+                                                    <select class="form-select"  class="inputs" aria-label="Default select example">
+                                                        <option selected>Selecione o Nome</option>
+                                                        <?php foreach ($ListaTurnos as $turnos): ?>
+                                                            <option value="<?= $turnos['name']; ?>"> <?= $turnos['name']; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
                                                 </div>
                                                 <div class="custom-form-control  d-flex flex-column  w-100">
                                                     <label for="position">Cargo/Função<span class="red-asterisk">*</span></label>
@@ -180,22 +198,27 @@ if (!empty($_GET['search'])) {
                                             <div class="Dados1Control d-flex mt-2">
                                                 
                                                 <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="id">Data Da Contratação<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="date" name="dt-hiring" id="dt-hiring" required>
+                                                    <label for="dt_hiring">Data Da Contratação<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="date" name="dt_hiring" id="dt_hiring" required>
                                                 </div>
                                                 <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="name">Salário Real<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="number" name="Nome" id="name" required>
+                                                    <label for="real_wage">Salário Real<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="number" name="real_wage" id="real_wage" required>
                                                 </div>
                                                 <div class="custom-form-control  d-flex flex-column w-50">
-                                                    <label for="position">Salário fiscal<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="text" name="position" id="position" required>
+                                                    <label for="fiscal_wage">Salário fiscal<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="text" name="fiscal_wage" id="fiscal_wage" required>
                                                 </div>
                                             </div>
                                             <div class="Dados1Control d-flex mt-2">
                                                     <div class="custom-form-control d-flex flex-column">
-                                                        <label for="position">Turnos<span class="red-asterisk">*</span></label>
-                                                        <input class="inputs" type="text" name="position" id="position" required>
+                                                        <label for="id_shift">Turnos<span class="red-asterisk">*</span></label>
+                                                        <select class="form-select"  class="inputs" aria-label="Default select example">
+                                                        <option selected>Selecione o Turnos</option>
+                                                        <?php foreach ($ListaIdShift as $Shifts): ?>
+                                                            <option value="<?= $Shifts['shift']; ?>"><?= $Shifts['shift']; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
                                                     </div>
                                                 </div>
                                         </div>
@@ -204,6 +227,7 @@ if (!empty($_GET['search'])) {
                                 </div>
                             </div>
                             <!-- //? FIM DO DADOS DO FUNCIONARIO collapse  -->
+                            <!-- //? DADOS DO DEPENDENTE collapse  -->
                             <p>
                                 <button class="btn btn-botao w-100" type="button" id="toggleButton2">
                                 <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dependentes <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
@@ -222,7 +246,7 @@ if (!empty($_GET['search'])) {
                                                 </div>
                                                 <div class="custom-form-control d-flex flex-column  w-100">
                                                     <label for="name">Nome<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="text" name="Nome" id="name" required>
+                                                    <input class="inputs" type="text" name="name" id="name" required>
                                                 </div>
                                                 <div class="custom-form-control  d-flex flex-column  w-100">
                                                     <label for="position">Relação<span class="red-asterisk">*</span></label>
@@ -249,10 +273,11 @@ if (!empty($_GET['search'])) {
                                     </div> 
                                 </div>
                             </div>
+                            <!-- //? FIM DADOS DO DEPENDENTE collapse  -->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-botao">Save changes</button>
+                                <button type="button" class="btn btn-botao" onclick="saveFuncionarios()">Adicionar</button>
                             </div>
                         </div>
                 </div> 
@@ -301,10 +326,11 @@ if (!empty($_GET['search'])) {
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
   </script>
   <script>
+
     $.fn.dataTable.ext.errMode = 'throw';
         $(document).ready(function(e) {
             
@@ -312,6 +338,29 @@ if (!empty($_GET['search'])) {
                 pagingType: 'simple'
             });
         });
+        function saveFuncionarios(){
+        $.ajax ({
+            type: 'POST',
+            url : 'actions/FuncionariosAction.php',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                action: 'saveFuncionarios',
+                id_person: id_person,
+                dt_hiring: dt_hiring,
+                fiscal_wage: fiscal_wage,
+                real_wage: real_wage,
+                position: position,
+                id_shift: id_shift,
+                balance_of_hours: balance_of_hours
+            }),
+            success: function(data) {
+                console.log("success");
+            },
+            error: function(xhr, textStatus, error) {
+                console.log(xhr, textStatus, error);
+            },
+        }
+    )}
 
     function limparInput() {
         $('#filtrar').val('');
@@ -340,6 +389,7 @@ if (!empty($_GET['search'])) {
             $('#myCollapse2').slideToggle();
         });
     });
+    
 //! _______________________________________________________________
     let search = document.getElementById('filtrar');
     search.addEventListener("keydown", function(event){

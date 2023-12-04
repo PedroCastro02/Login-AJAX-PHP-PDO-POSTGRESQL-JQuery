@@ -192,9 +192,9 @@
          <li><a href="home.php"><i class="fas fa-home"></i>Home</a></li>
          <li><a href="#"><i class="fas fa-sliders-h"></i>Clients</a></li>
          <li><a href="funcionarios.php"><i class="fas fa-address-book"></i>Funcionários</a></li>
+         <li><a href="#"><i class="fas fa-user"></i>Pessoas</a></li>
          <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
          <li><a href="#"><i class="fas fa-stream"></i>Features</a></li>
-         <li><a href="#"><i class="fas fa-user"></i>About us</a></li>
          <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li>
          <div class="icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>

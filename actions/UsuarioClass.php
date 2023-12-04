@@ -1,8 +1,7 @@
 <?php
 
 
-class Usuario {
-
+class UsuarioClass {
     private $id;
     private $email;
     private $username;
@@ -10,8 +9,7 @@ class Usuario {
     private $id_company;
     private $id_profile;
     private $id_person;
-
-
+//!=========================Functions User====================================
     public function getId() {
         return $this->id;
     }
@@ -60,12 +58,13 @@ class Usuario {
     public function setId_person($pers) {
     $this->id_person = $pers;
     }
+    
 }
 
 Interface UsuarioDAO {
-    public function add(Usuario $u);
+    public function add(UsuarioClass $u);
     public function findAll();
     public function findById($id);
-    public function update(Usuario $u);
-    public function delete(Usuario $id);
+    public function update(UsuarioClass $u);
+    public function delete(UsuarioClass $id);
 }

@@ -1,10 +1,10 @@
 <?php
 error_reporting(0);
 include '../connection/connection.php';
-include 'Usuario.php';
+include 'UsuarioClass.php';
 
 
-class UsuarioDAOPgSQL implements UsuarioDAO {
+class UsuarioActions implements UsuarioDAO {
 
     private $pdo;
 
@@ -12,7 +12,7 @@ class UsuarioDAOPgSQL implements UsuarioDAO {
         $this->pdo =  $driver;
     }
 
-    public function add(Usuario $u) {
+    public function add(UsuarioClass $u) {
         $flag = 0;
         if ($this->usernameExists($u->getUsername())) {
             echo "Username ja esta em uso!";
@@ -43,7 +43,7 @@ class UsuarioDAOPgSQL implements UsuarioDAO {
         $resultado = $this->pdo->query("SELECT * FROM users");
         
         while ($row = $resultado->fetchAll()) {
-            $u = new Usuario();
+            $u = new UsuarioClass();
             $u->setId($row['id']);
             $u->setEmail($row['email']);
             $u->setUsername($row['username']);
@@ -62,13 +62,13 @@ class UsuarioDAOPgSQL implements UsuarioDAO {
         
     }
 
-    public function update(Usuario $u){
+    public function update(UsuarioClass $u){
         $sql = "UPDATE users SET email=?, username=?, password=?, id_company=?, id_person=?, id_profile=? WHERE id=?";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(["ssssssi", $u->getEmail(), $u->getUsername(), $u->getPassword(), $u->getId_Company(), $u->getId_Person(), $u->getId_Profile(), $u->getId()]);
     }
     
-    public function delete(Usuario $id){
+    public function delete(UsuarioClass $id){
       
     }
 
@@ -93,9 +93,9 @@ class UsuarioDAOPgSQL implements UsuarioDAO {
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (isset($data['action']) && $data['action'] === 'saveRecords') {
-            $usuarioDAO = new UsuarioDAOPgSQL($pdo); 
+            $usuarioDAO = new UsuarioActions($pdo); 
 
-            $usuario = new Usuario();
+            $usuario = new UsuarioClass();
             $usuario->setEmail($data['email']);
             $usuario->setUsername($data['username']);
             $usuario->setPassword($data['password']);
