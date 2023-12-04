@@ -44,14 +44,21 @@
         justify-content: center;
         align-items: center;
     }
-    .central-login {
+    .central-login-error {
         background-color: white;
         text-align: center;
         width: 450px;
         padding: 30px 0px;
         border-radius: 20px;
         box-shadow: rgba(255, 0, 0, 0.25) 0px 54px 55px, rgba(255, 0, 0, 0.12) 0px -12px 30px, rgba(255, 0, 0, 0.12) 0px 4px 6px, rgba(255, 0, 0, 0.17) 0px 12px 13px, rgba(255, 0, 0, 0.09) 0px -3px 5px;
-
+    }
+    .central-login-success {
+        background-color: white;
+        text-align: center;
+        width: 450px;
+        padding: 30px 0px;
+        border-radius: 20px;
+        box-shadow: rgba(0, 255, 0, 0.25) 0px 54px 55px, rgba(0, 255, 0, 0.12) 0px -12px 30px, rgba(0, 255, 0, 0.12) 0px 4px 6px, rgba(0, 255, 0, 0.17) 0px 12px 13px, rgba(0, 255, 0, 0.09) 0px -3px 5px;
     }
     .cotrol-input {
         text-align: start;
@@ -84,22 +91,23 @@
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
         border: none;
-        background: #c73232; 
+        background: rgba(0, 0, 0, 0.25); 
         color: white;
         border-style: outset;
-        border-color: #c73232;
+        border-color: rgba(0, 0, 0, 0.25);
         height: 50px;
         width: 100px;
         font: bold15px arial,sans-serif;
+        font-weight: bold;
         text-shadow: none;
     }
     .input1 {
-        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
         border-radius: 7px;
         border: none;
     }
     .inputSelect {
-        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
         border-radius: 7px;
         border: none;
         padding-top: 5px;
@@ -111,7 +119,7 @@
     <div class="container-login">
         
 
-        <div class="central-login">
+        <div class="central-login-success" id="central">
             <div class="control-voltar">
                 <a href="index.php"><span class="material-symbols-outlined">arrow_back_ios</span></a>
             </div>
@@ -188,6 +196,8 @@
         
 
         if(username == "" || email == "" || password == ""){
+            $('#central').removeClass('central-login-success');
+            $('#central').addClass('central-login-error');
             $('#mensagem-sucesso').removeClass('alert alert-success');
             $('#mensagem-sucesso').addClass('alert alert-danger');
             $('#mensagem-sucesso').removeClass('d-none');
@@ -197,6 +207,8 @@
 
         var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         if (!email.match(emailPattern)) {
+            $('#central').removeClass('central-login-success');
+            $('#central').addClass('central-login-error');
             $('#mensagem-sucesso').removeClass('alert alert-success');
             $('#mensagem-sucesso').addClass('alert alert-danger');
             $('#mensagem-sucesso').removeClass('d-none');
@@ -204,13 +216,17 @@
             return;
         }
         if (password !== confirmPassword) {
-        $('#mensagem-sucesso').removeClass('alert alert-success');
-        $('#mensagem-sucesso').addClass('alert alert-danger');
-        $('#mensagem-sucesso').removeClass('d-none');
-        $('#mensagem-sucesso').text("As senhas não coincidem.");
+            $('#central').removeClass('central-login-success');
+            $('#central').addClass('central-login-error');
+            $('#mensagem-sucesso').removeClass('alert alert-success');
+            $('#mensagem-sucesso').addClass('alert alert-danger');
+            $('#mensagem-sucesso').removeClass('d-none');
+            $('#mensagem-sucesso').text("As senhas não coincidem.");
         return;
         }  
         if (password.trim().length < 3 ) {
+            $('#central').removeClass('central-login-success');
+            $('#central').addClass('central-login-error');
             $('#mensagem-sucesso').removeClass('alert alert-success');
             $('#mensagem-sucesso').addClass('alert alert-danger');
             $('#mensagem-sucesso').removeClass('d-none');
@@ -233,22 +249,29 @@
             success: function(data) {
                 console.log('SUCESSO')
                 if(data === "Email ja esta em uso!") {
-                    
+                    $('#central').removeClass('central-login-success');
+                    $('#central').addClass('central-login-error');
                     $('#mensagem-sucesso').removeClass('alert alert-success');
                     $('#mensagem-sucesso').addClass('alert alert-danger');
                     $('#mensagem-sucesso').removeClass('d-none');
                     $('#mensagem-sucesso').text(data);
                 } else if(data === "Username ja esta em uso!") {
+                    $('#central').removeClass('central-login-success');
+                    $('#central').addClass('central-login-error');
                     $('#mensagem-sucesso').removeClass('alert alert-success');
                     $('#mensagem-sucesso').addClass('alert alert-danger');
                     $('#mensagem-sucesso').removeClass('d-none');
                     $('#mensagem-sucesso').text(data);
                 } else if(data === "Username e Email ja estão em uso!"){
+                    $('#central').removeClass('central-login-success');
+                    $('#central').addClass('central-login-error');
                     $('#mensagem-sucesso').removeClass('alert alert-success');
                     $('#mensagem-sucesso').addClass('alert alert-danger');
                     $('#mensagem-sucesso').removeClass('d-none');
                     $('#mensagem-sucesso').text(data);
                 } else {
+                    $('#central').removeClass('central-login-error');
+                    $('#central').addClass('central-login-success');
                     $('#mensagem-sucesso').removeClass('alert alert-danger');
                     $('#mensagem-sucesso').addClass('alert alert-success');
                     $('#mensagem-sucesso').text(data);

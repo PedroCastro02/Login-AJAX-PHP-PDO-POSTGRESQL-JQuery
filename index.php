@@ -21,7 +21,7 @@
         justify-content: center;
         align-items: center;
     }
-    .central-login {
+    .central-login-error {
         background-color: white;
         text-align: center;
         width: 400px;
@@ -29,6 +29,14 @@
         border-radius: 20px;
         box-shadow: rgba(255, 0, 0, 0.25) 0px 54px 55px, rgba(255, 0, 0, 0.12) 0px -12px 30px, rgba(255, 0, 0, 0.12) 0px 4px 6px, rgba(255, 0, 0, 0.17) 0px 12px 13px, rgba(255, 0, 0, 0.09) 0px -3px 5px;
 
+    }
+    .central-login-success {
+        background-color: white;
+        text-align: center;
+        width: 400px;
+        padding: 30px 0px;
+        border-radius: 20px;
+        box-shadow: rgba(0, 255, 0, 0.25) 0px 54px 55px, rgba(0, 255, 0, 0.12) 0px -12px 30px, rgba(0, 255, 0, 0.12) 0px 4px 6px, rgba(0, 255, 0, 0.17) 0px 12px 13px, rgba(0, 255, 0, 0.09) 0px -3px 5px;
     }
     .cotrol-input {
         text-align: start;
@@ -49,7 +57,7 @@
         visibility: hidden;
     }
     .input1 {
-        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
     }
     .input-submit {
         padding-left: 10px;
@@ -57,13 +65,14 @@
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
         border: none;
-        background: #c73232; 
+        background:  rgba(0, 0, 0, 0.25); 
         color: white;
         border-style: outset;
-        border-color: #c73232;
+        border-color:  rgba(0, 0, 0, 0.25);
         height: 50px;
         width: 100px;
         font: bold15px arial,sans-serif;
+        font-weight: bold;
         text-shadow: none;
     }
 
@@ -71,7 +80,7 @@
 <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
 <body>
     <div class="container-login">
-        <div class="central-login">
+        <div class="central-login-success" id="central">
             <div class="titulo">
                 <h1>LOGIN</h1>
             </div>
@@ -123,7 +132,8 @@
                     this.innerHTML = '<span class="material-symbols-outlined">visibility_off</span>';
                 };
             });
-
+            
+           
             $('#form1').submit(function(e){
                 e.preventDefault();
 
@@ -139,8 +149,10 @@
                     if(result.redirect) {
                         window.location.href = result.redirect;
                     } else {
-                    $('#mensagem-erro').text("Email ou senha não encontrado");
-                    $('#mensagem-erro').removeClass('d-none');
+                        $('#central').removeClass('central-login-success');
+                        $('#central').addClass('central-login-error');
+                        $('#mensagem-erro').text("Email ou senha não encontrado");
+                        $('#mensagem-erro').removeClass('d-none');
                     }
                 });
             });

@@ -11,6 +11,7 @@ class Usuario {
     private $id_profile;
     private $id_person;
 
+
     public function getId() {
         return $this->id;
     }

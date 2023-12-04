@@ -3,11 +3,26 @@ require 'connection/connection.php';
 
 $listaJoin = [];
 
-$sqlJoin = $pdo->query('SELECT p.name, p.telephone, e."position", e.dt_hiring, e.balance_of_hours, e.id FROM employees e 
-JOIN people p ON e.id_person = p.id');
+$sqlJoin = $pdo->query("SELECT p.name, p.telephone, e.position, e.dt_hiring, e.balance_of_hours, e.id FROM employees e 
+JOIN people p ON e.id_person = p.id");
 
 if ($sqlJoin->rowCount() > 0) {
     $listaJoin = $sqlJoin->fetchAll(PDO::FETCH_ASSOC);
+}
+if (!empty($_GET['search'])) {
+    $data = $_GET['search'];
+    $sql = "SELECT p.name, p.telephone, e.position, e.dt_hiring, e.balance_of_hours, e.id 
+            FROM employees e 
+            JOIN people p ON e.id_person = p.id
+            WHERE e.id LIKE '%$data%' 
+               OR p.name LIKE '%$data%' 
+               OR p.telephone LIKE '%$data%' 
+               OR e.position LIKE '%$data%' 
+               OR e.balance_of_hours LIKE '%$data%' 
+               OR e.dt_hiring LIKE '%$data%' 
+            ORDER BY e.id DESC";
+} else {
+    
 }
 
 ?>
@@ -22,15 +37,17 @@ if ($sqlJoin->rowCount() > 0) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS v5.2.1 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://cdn.datatables.net/v/dt/dt-1.13.7/datatables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
     <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
 
+
 </head>
 
 <style>
+
     .container-control {
         height: 100vh;
         border: 2px solid white;
@@ -82,7 +99,29 @@ if ($sqlJoin->rowCount() > 0) {
         font-weight: 400;
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     }
+    .custom-form-control {
+        padding: 5px;
+        border: 1px solid white;
+    }
+
+    .inputs {
+        color:#000000;
+        border-radius: 7px;
+        padding: 5px;
+        border: 1px solid #5C636A;
+    }
+    .red-asterisk {
+        color: red;
+    }
+    .collapse {
+         display: none;
+    }
+    #id {
+        width: 75px;
+        background-color: #DDDDDD;
+    }
     
+   
 </style>
 <body>
 <?php include ('sidebar.php') ?>
@@ -93,7 +132,7 @@ if ($sqlJoin->rowCount() > 0) {
                 <div class="input-control">
                     <input type="search" class="form-control w-50 filtrar" id="filtrar" placeholder="Selecione um campo para filtrar">
                     <div class="buttons">
-                        <button class="btn btn-botao">Buscar</button>
+                        <button class="btn btn-botao" onclick="searchData()">Buscar</button>
                         <button class="btn btn-botao" onclick="limparInput()">Limpar</button>
                     </div>
                 </div>
@@ -104,21 +143,118 @@ if ($sqlJoin->rowCount() > 0) {
                 <!-- Vertically centered modal -->
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Adicionar novo funcionario</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                         <!-- //? conteudo  -->
                         <div class="modal-body">
-                            
+                        <p>
+                            <button class="btn btn-botao w-100" type="button" id="toggleButton">
+                            <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dados Do Funcionário <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
+                            </button>
+                        </p>
+                        <!-- //? DADOS DO FUNCIONARIO collapse  -->
+                            <div id="myCollapse1" class="collapse">
+                                <div class="card card-body">
+                                    <div class="dadosFuncionarios"> 
+                                    <form action="funcionarios.php" method="POST">
+                                        <div class="divDados1">
+                                            <div class="Dados1Control d-flex">
+                                                
+                                                <div class="custom-form-control d-flex flex-column w-25">
+                                                    <label for="id">Id</label>
+                                                    <input class="inputs" type="number" name="id" id="id" readonly> 
+                                                </div>
+                                                <div class="custom-form-control d-flex flex-column  w-100">
+                                                    <label for="name">Nome<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="text" name="Nome" id="name" required>
+                                                </div>
+                                                <div class="custom-form-control  d-flex flex-column  w-100">
+                                                    <label for="position">Cargo/Função<span class="red-asterisk">*</span></label>
+                                                    <input  class="inputs" type="text" name="position" id="position" required>
+                                                </div>
+                                            </div>
+                                            <div class="Dados1Control d-flex mt-2">
+                                                
+                                                <div class="custom-form-control d-flex flex-column w-50">
+                                                    <label for="id">Data Da Contratação<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="date" name="dt-hiring" id="dt-hiring" required>
+                                                </div>
+                                                <div class="custom-form-control d-flex flex-column w-50">
+                                                    <label for="name">Salário Real<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="number" name="Nome" id="name" required>
+                                                </div>
+                                                <div class="custom-form-control  d-flex flex-column w-50">
+                                                    <label for="position">Salário fiscal<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="text" name="position" id="position" required>
+                                                </div>
+                                            </div>
+                                            <div class="Dados1Control d-flex mt-2">
+                                                    <div class="custom-form-control d-flex flex-column">
+                                                        <label for="position">Turnos<span class="red-asterisk">*</span></label>
+                                                        <input class="inputs" type="text" name="position" id="position" required>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </form>
+                                    </div> 
+                                </div>
+                            </div>
+                            <!-- //? FIM DO DADOS DO FUNCIONARIO collapse  -->
+                            <p>
+                                <button class="btn btn-botao w-100" type="button" id="toggleButton2">
+                                <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dependentes <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
+                                </button>
+                            </p>
+                            <div id="myCollapse2" class="collapse">
+                                <div class="card card-body">
+                                    <div class="dadosFuncionarios"> 
+                                    <form action="funcionarios.php" method="POST">
+                                        <div class="divDados1">
+                                            <div class="Dados1Control d-flex">
+                                                
+                                                <div class="custom-form-control d-flex flex-column">
+                                                    <label for="id">Id</label>
+                                                    <input class="inputs" type="number" name="id" id="id" readonly> 
+                                                </div>
+                                                <div class="custom-form-control d-flex flex-column  w-100">
+                                                    <label for="name">Nome<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="text" name="Nome" id="name" required>
+                                                </div>
+                                                <div class="custom-form-control  d-flex flex-column  w-100">
+                                                    <label for="position">Relação<span class="red-asterisk">*</span></label>
+                                                    <input  class="inputs" type="text" name="position" id="position" required>
+                                                </div>
+                                            </div>
+                                            <div class="Dados1Control d-flex mt-2">
+                                                
+                                                <div class="custom-form-control d-flex flex-column w-50">
+                                                    <label for="dt_birth">Data De Nascimento<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="date" name="dt_birth" id="dt_birth" required>
+                                                </div>
+                                                <div class="custom-form-control d-flex flex-column w-50">
+                                                    <label for="name">Telefone<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="phone" name="Nome" id="name" required>
+                                                </div>
+                                                <div class="custom-form-control">
+                                                    <button type="button" class="btn btn-botao">Remover Dependente</button>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </form>
+                                    </div> 
+                                </div>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-botao">Save changes</button>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-botao">Save changes</button>
-                        </div>
-                        </div>
-                    </div>
                 </div> 
                 <!-- //? FIM modal -->
             </div>
@@ -165,12 +301,13 @@ if ($sqlJoin->rowCount() > 0) {
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
   </script>
   <script>
     $.fn.dataTable.ext.errMode = 'throw';
-        $(document).ready(function() {
+        $(document).ready(function(e) {
+            
             $('#example').DataTable({
                 pagingType: 'simple'
             });
@@ -193,7 +330,29 @@ if ($sqlJoin->rowCount() > 0) {
             }
         });
     });
-    
+    $(document).ready(function() {
+            $('#toggleButton').on('click', function() {
+                $('#myCollapse1').slideToggle();
+            });
+        });
+    $(document).ready(function() {
+        $('#toggleButton2').on('click', function() {
+            $('#myCollapse2').slideToggle();
+        });
+    });
+//! _______________________________________________________________
+    let search = document.getElementById('filtrar');
+    search.addEventListener("keydown", function(event){
+        if (event.key === "Enter") {
+            search.data();
+        }
+    });
+
+    function searchData() {
+        window.location = 'funcionarios.php?search='+search.value;
+    }
+//! _______________________________________________________
+        
 
   </script>
 
