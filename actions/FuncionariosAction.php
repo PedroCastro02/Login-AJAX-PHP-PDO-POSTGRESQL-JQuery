@@ -45,8 +45,11 @@ class FuncionariosAction implements FuncionarioDAO {
         try {
             $sql = "DELETE FROM employees WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->bindValue(':id', $id);
+            $idValue = $id->getId();
+            $stmt->bindParam(':id', $idValue);
             $stmt->execute();
+            echo "Funcionario Deletado";
+            
         } catch(PDOException $e) {
             echo "Erro ao Excluir funcionario: " . $e->getMessage();
         }
@@ -55,11 +58,9 @@ class FuncionariosAction implements FuncionarioDAO {
     
 }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = json_decode(file_get_contents('php://input'), true);
-
+        $data = json_decode(file_get_contents('php://input'), true); 
         if (isset($data['action']) && $data['action'] === 'saveFuncionarios') {
             $funcionarioDAO = new FuncionariosAction($pdo); 
-
             $funcionario = new FuncionarioClass();
             $funcionario->setId($data['id']);
             $funcionario->setId_person($data['id_person']);
@@ -72,8 +73,15 @@ class FuncionariosAction implements FuncionarioDAO {
 
 
             $funcionarioDAO->adicionarFuncionario($funcionario);
+
+        } else if (isset($data['action']) && $data['action'] === 'deleteFuncionario' ) {
+            $funcionarioDAO = new FuncionariosAction($pdo); 
+            $funcionario = new FuncionarioClass();
+            $funcionario->setId($data['id']); 
             $funcionarioDAO->delete($funcionario);
-        }
-    }
+        }  
+
+    } 
+    
 
 ?>

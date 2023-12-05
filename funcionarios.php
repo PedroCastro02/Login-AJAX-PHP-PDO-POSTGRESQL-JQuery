@@ -350,7 +350,7 @@ if($sqlIdShifts->rowCount() > 0){
                         <td><?= $funcionariosJOIN['balance_of_hours'];?></td>
                         <td><a href="#"><i class="fas fa-paperclip" style="color: #2f89fc; margin-left:30%;"></i></a></td>
                         <td><a href="editar.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-eye" style="color: #000000; margin-left:30%;"></i></a></td>
-                        <td><a href="FuncionariosAction.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></a></td>
+                        <td><span onclick="deleteFuncionario(<?= $funcionariosJOIN['id'];?>)"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></span></td>
                     </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -402,12 +402,36 @@ if($sqlIdShifts->rowCount() > 0){
                     } else if (data === "Erro ao adicionar funcionário") {
                         $('#ErrorModal').modal('show');
                     }
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
                 },
                 error: function(xhr, textStatus, error) {
                     console.log(xhr, textStatus, error);
                 },
             }
         )}
+        function deleteFuncionario(id){
+            var confirmDelete = window.confirm("Você tem certeza que deseja excluir este funcionário?");
+            if(confirmDelete) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'actions/FuncionariosAction.php',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        action: 'deleteFuncionario',
+                        id: id,
+                    }),
+                    success: function(data) {
+                            location.reload();
+                    },
+                    error: function(xhr, textStatus, error) {
+                        console.log(xhr, textStatus, error);
+                    },
+                });
+            }
+        }
+        
         
                
 
