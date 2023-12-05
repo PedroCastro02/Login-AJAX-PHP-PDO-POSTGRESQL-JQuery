@@ -28,7 +28,7 @@ if (!empty($_GET['search'])) {
 }
 
 $ListaTurnos = [];
-$sqlTurnos = $pdo->query('SELECT p.name FROM people p WHERE p.active = true');
+$sqlTurnos = $pdo->query('SELECT p.name, p.id FROM people p WHERE p.active = true');
 if($sqlTurnos->rowCount() > 0){
     $ListaTurnos = $sqlTurnos->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -133,6 +133,14 @@ if($sqlIdShifts->rowCount() > 0){
         width: 75px;
         background-color: #DDDDDD;
     }
+    #successModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Um fundo semi-transparente para destacar o modal */
+    }
     
    
 </style>
@@ -173,7 +181,7 @@ if($sqlIdShifts->rowCount() > 0){
                             <div id="myCollapse1" class="collapse">
                                 <div class="card card-body">
                                     <div class="dadosFuncionarios"> 
-                                    <form action="funcionarios.php" method="POST">
+                                    <form method="POST">
                                         <div class="divDados1">
                                             <div class="Dados1Control d-flex">
                                                 
@@ -183,10 +191,10 @@ if($sqlIdShifts->rowCount() > 0){
                                                 </div>
                                                 <div class="custom-form-control d-flex flex-column  w-100">
                                                     <label for="id_person">Nome<span class="red-asterisk">*</span></label>
-                                                    <select class="form-select"  class="inputs" aria-label="Default select example">
+                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="id_person">
                                                         <option selected>Selecione o Nome</option>
                                                         <?php foreach ($ListaTurnos as $turnos): ?>
-                                                            <option value="<?= $turnos['name']; ?>"> <?= $turnos['name']; ?></option>
+                                                            <option value="<?= $turnos['id']; ?>"> <?= $turnos['name']; ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
@@ -213,10 +221,10 @@ if($sqlIdShifts->rowCount() > 0){
                                             <div class="Dados1Control d-flex mt-2">
                                                     <div class="custom-form-control d-flex flex-column">
                                                         <label for="id_shift">Turnos<span class="red-asterisk">*</span></label>
-                                                        <select class="form-select"  class="inputs" aria-label="Default select example">
+                                                        <select class="form-select"  class="inputs" aria-label="Default select example" id="id_shift">
                                                         <option selected>Selecione o Turnos</option>
                                                         <?php foreach ($ListaIdShift as $Shifts): ?>
-                                                            <option value="<?= $Shifts['shift']; ?>"><?= $Shifts['shift']; ?></option>
+                                                            <option value="<?= $Shifts['id']; ?>"><?= $Shifts['shift']; ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
                                                     </div>
@@ -279,6 +287,14 @@ if($sqlIdShifts->rowCount() > 0){
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-botao" onclick="saveFuncionarios()">Adicionar</button>
                             </div>
+                            <!-- //? MODAL DE SUCESSO  -->
+                            <div class="modal" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen" role="document">
+                                    <div class="modal-content">
+                                        Funcionário Adicionado Com Sucesso
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                 </div> 
                 <!-- //? FIM modal -->
@@ -339,6 +355,13 @@ if($sqlIdShifts->rowCount() > 0){
             });
         });
         function saveFuncionarios(){
+            var id_person = $('#id_person').val();
+            var dt_hiring = $('#dt_hiring').val();
+            var fiscal_wage = $('#fiscal_wage').val();
+            var real_wage = $('#real_wage').val();
+            var position = $('#position').val();
+            var id_shift = $('#id_shift').val();
+            var balance_of_hours = $('#balance_of_hours').val();
         $.ajax ({
             type: 'POST',
             url : 'actions/FuncionariosAction.php',
@@ -354,7 +377,7 @@ if($sqlIdShifts->rowCount() > 0){
                 balance_of_hours: balance_of_hours
             }),
             success: function(data) {
-                console.log("success");
+                $('#successModal').modal('show');
             },
             error: function(xhr, textStatus, error) {
                 console.log(xhr, textStatus, error);

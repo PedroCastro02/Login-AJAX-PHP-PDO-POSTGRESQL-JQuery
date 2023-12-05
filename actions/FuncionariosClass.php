@@ -15,28 +15,28 @@ class FuncionarioClass {
         return $this->id;
     }
     public function setId($id) {
-       $this->id = trim($id);
+       $this->id = $id;
     }
 //------------------------------------------
     public function getId_person() {
         return $this->id_person;
     }
     public function setId_person($n) {
-       $this->id_person = trim($n);
+       $this->id_person = $n;
     }
 //------------------------------------------
     public function getDt_hiring() {
         return $this->dt_hiring;
     }
     public function setDt_hiring($dt) {
-       $this->dt_hiring = trim($dt);
+       $this->dt_hiring = $dt;
     }
 //------------------------------------------
     public function getfiscal_wage() {
         return $this->fiscal_wage;
     }
     public function setfiscal_wage($Fw) {
-       $this->fiscal_wage = (trim($Fw));
+       $this->fiscal_wage = $Fw;
     }
 //------------------------------------------
     public function getReal_wage() {
