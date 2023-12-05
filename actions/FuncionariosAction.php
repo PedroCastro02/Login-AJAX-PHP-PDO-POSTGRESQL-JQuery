@@ -14,7 +14,6 @@ class FuncionariosAction implements FuncionarioDAO {
 
     public function adicionarFuncionario(FuncionarioClass $u) {
 
-
         // echo '<prev>';
         // print_r($u->getId_person());
         // echo '</prev>';
@@ -24,16 +23,15 @@ class FuncionariosAction implements FuncionarioDAO {
             $sql = "INSERT INTO employees (id_person, position, dt_hiring, real_wage , fiscal_wage, id_shift) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([$u->getId_person(), $u->getPosition(), $u->getDt_hiring(), $u->getfiscal_wage(), $u->getReal_wage(),$u->getId_shift()]);       
-            echo "Funcionario adicionado com sucesso";
+            echo "Funcionário adicionado com sucesso!!";
         } catch (PDOException $e) {
-            echo "Erro ao adicionar funcionario: " . $e->getMessage();
+            echo "Erro ao adicionar funcionário";
         }
     }
     
     public function findAll(){
        
     }
-
 
     public function findById($id) {
         
@@ -44,7 +42,14 @@ class FuncionariosAction implements FuncionarioDAO {
     }
     
     public function delete(FuncionarioClass $id){
-      
+        try {
+            $sql = "DELETE FROM employees WHERE id = :id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+        } catch(PDOException $e) {
+            echo "Erro ao Excluir funcionario: " . $e->getMessage();
+        }
     }
 
     
@@ -67,6 +72,7 @@ class FuncionariosAction implements FuncionarioDAO {
 
 
             $funcionarioDAO->adicionarFuncionario($funcionario);
+            $funcionarioDAO->delete($funcionario);
         }
     }
 

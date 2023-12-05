@@ -134,12 +134,14 @@ if($sqlIdShifts->rowCount() > 0){
         background-color: #DDDDDD;
     }
     #successModal {
-        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5); /* Um fundo semi-transparente para destacar o modal */
+    }
+    #ErrorModal {
+        background: rgba(0, 0, 0, 0.5); 
     }
     
    
@@ -234,7 +236,7 @@ if($sqlIdShifts->rowCount() > 0){
                                     </div> 
                                 </div>
                             </div>
-                            <!-- //? FIM DO DADOS DO FUNCIONARIO collapse  -->
+                            <!-- //! FIM DO DADOS DO FUNCIONARIO collapse  -->
                             <!-- //? DADOS DO DEPENDENTE collapse  -->
                             <p>
                                 <button class="btn btn-botao w-100" type="button" id="toggleButton2">
@@ -281,23 +283,41 @@ if($sqlIdShifts->rowCount() > 0){
                                     </div> 
                                 </div>
                             </div>
-                            <!-- //? FIM DADOS DO DEPENDENTE collapse  -->
+                            <!-- //! FIM DADOS DO DEPENDENTE collapse  -->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-botao" onclick="saveFuncionarios()">Adicionar</button>
                             </div>
-                            <!-- //? MODAL DE SUCESSO  -->
-                            <div class="modal" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen" role="document">
-                                    <div class="modal-content">
-                                        Funcionário Adicionado Com Sucesso
+                            <!-- //? MODAL DE SUCESSO e FALHA -->
+                            <div class="modal fade bd-example" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="successModal">
+                                <div class="modal-dialog modal-dialog-centered d-flex justify-content-center align-items-center">
+                                    <div class="modal-content d-flex justify-content-center align-items-center flex-column" id="conteudo-sucesso-modal" style="height: 250px; width: 375px;">
+                                    <div class="text-success text-center" style="font-size: 24px;">
+                                        <i class="fas fa-check-circle fa-3x mb-4"></i>
+                                        <br>
+                                        Funcionário Adicionado com Sucesso!
+                                    </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal fade bd-example" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="ErrorModal">
+                                <div class="modal-dialog modal-dialog-centered d-flex justify-content-center align-items-center">
+                                    <div class="modal-content d-flex justify-content-center align-items-center flex-column text-danger" id="conteudo-sucesso-modal" style="height: 250px; width: 375px;">
+                                    <div class="text-center" style="font-size: 24px;">
+                                        <i class="fas fa-times-circle fa-3x mb-4"></i>
+                                        <br>
+                                        Erro ao adicionar Funcionário.
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- //! FIM MODAL DE SUCESSO E FALHA -->
+
                         </div>
                 </div> 
-                <!-- //? FIM modal -->
+                <!-- //?! FIM modal -->
             </div>
         </div>
             <!-- //? Início tabela -->
@@ -330,7 +350,7 @@ if($sqlIdShifts->rowCount() > 0){
                         <td><?= $funcionariosJOIN['balance_of_hours'];?></td>
                         <td><a href="#"><i class="fas fa-paperclip" style="color: #2f89fc; margin-left:30%;"></i></a></td>
                         <td><a href="editar.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-eye" style="color: #000000; margin-left:30%;"></i></a></td>
-                        <td><a href="excluir.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></a></td>
+                        <td><a href="FuncionariosAction.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></a></td>
                     </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -363,27 +383,33 @@ if($sqlIdShifts->rowCount() > 0){
             var id_shift = $('#id_shift').val();
             var balance_of_hours = $('#balance_of_hours').val();
         $.ajax ({
-            type: 'POST',
-            url : 'actions/FuncionariosAction.php',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                action: 'saveFuncionarios',
-                id_person: id_person,
-                dt_hiring: dt_hiring,
-                fiscal_wage: fiscal_wage,
-                real_wage: real_wage,
-                position: position,
-                id_shift: id_shift,
-                balance_of_hours: balance_of_hours
-            }),
-            success: function(data) {
-                $('#successModal').modal('show');
-            },
-            error: function(xhr, textStatus, error) {
-                console.log(xhr, textStatus, error);
-            },
-        }
-    )}
+                type: 'POST',
+                url : 'actions/FuncionariosAction.php',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    action: 'saveFuncionarios',
+                    id_person: id_person,
+                    dt_hiring: dt_hiring,
+                    fiscal_wage: fiscal_wage,
+                    real_wage: real_wage,
+                    position: position,
+                    id_shift: id_shift,
+                    balance_of_hours: balance_of_hours
+                }),
+                success: function(data) {
+                    if(data === "Funcionário adicionado com sucesso!!") {
+                        $('#successModal').modal('show');
+                    } else if (data === "Erro ao adicionar funcionário") {
+                        $('#ErrorModal').modal('show');
+                    }
+                },
+                error: function(xhr, textStatus, error) {
+                    console.log(xhr, textStatus, error);
+                },
+            }
+        )}
+        
+               
 
     function limparInput() {
         $('#filtrar').val('');
