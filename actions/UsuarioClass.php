@@ -68,4 +68,5 @@ Interface UsuarioDAO {
     public function findById($id);
     public function update(UsuarioClass $u);
     public function delete(UsuarioClass $id);
+    public function deleteUsuario(UsuarioClass $id);
 }

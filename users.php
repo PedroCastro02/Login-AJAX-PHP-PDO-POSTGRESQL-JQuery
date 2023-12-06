@@ -269,7 +269,7 @@ if($sqlProfiles->rowCount() > 0){
                                     <div class="text-success text-center" style="font-size: 24px;">
                                         <i class="fas fa-check-circle fa-3x mb-4"></i>
                                         <br>
-                                        Funcionário Adicionado com Sucesso!
+                                        Usuario Adicionado com Sucesso!
                                     </div>
                                     </div>
                                 </div>
@@ -328,7 +328,7 @@ if($sqlProfiles->rowCount() > 0){
                             <td><?= $usersJOIN['username'];?></td>
                             <td><?= $usersJOIN['profile'];?></td>
                             <td><?= $usersJOIN['email'];?></td>
-                            <td><span style="cursor: pointer;" onclick="deleteFuncionario(<?= $usersJOIN['id'];?>)"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></span></td>
+                            <td><span style="cursor: pointer;" onclick="deleteUsuario(<?= $usersJOIN['id'];?>)"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></span></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -374,14 +374,14 @@ if($sqlProfiles->rowCount() > 0){
                     id_company: id_company
                 }),
                 success: function(data) {
-                    // if(data === "Funcionário adicionado com sucesso!!") {
-                    //     $('#successModal').modal('show');
-                    // } else if (data === "Erro ao adicionar funcionário") {
-                    //     $('#ErrorModal').modal('show');
-                    // }
-                    // setTimeout(function() {
-                    //     location.reload();
-                    // }, 2000);
+                    if(data === "Usuário cadastrado com sucesso!") {
+                        $('#successModal').modal('show');
+                    } else if (data === "Erro ao cadastrar usuário") {
+                        $('#ErrorModal').modal('show');
+                    }
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
                     console.log("sucessos")
                 },
                 error: function(xhr, textStatus, error) {
@@ -398,14 +398,15 @@ if($sqlProfiles->rowCount() > 0){
                     url: 'actions/UsuarioActions.php',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        action: 'deleteFuncionario',
+                        action: 'deleteUsuario',
                         id: id,
                     }),
                     success: function(data) {
-                        $('#SuccessDelete').modal('show');
-                        setTimeout(function() {
-                        location.reload();
-                    }, 2000);
+                    //     $('#SuccessDelete').modal('show');
+                    //     setTimeout(function() {
+                    //     location.reload();
+                    // }, 2000);
+                    console.log("deletes");
                     },
                     error: function(xhr, textStatus, error) {
                         console.log(xhr, textStatus, error);

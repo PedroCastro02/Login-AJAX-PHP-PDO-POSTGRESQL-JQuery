@@ -58,7 +58,7 @@ class UsuarioActions implements UsuarioDAO {
                 $stmt->execute([$u->getEmail(), $u->getUsername(), $hashedPassword, $u->getId_Company(), $u->getId_Person(), $u->getId_Profile()]);
                 echo "Usuário cadastrado com sucesso!";
             } catch (PDOException $e) {
-                echo "Erro ao cadastrar usuário1: " . $e->getMessage();
+                echo "Erro ao cadastrar usuário";
             }
         }
     }
@@ -92,9 +92,21 @@ class UsuarioActions implements UsuarioDAO {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(["ssssssi", $u->getEmail(), $u->getUsername(), $u->getPassword(), $u->getId_Company(), $u->getId_Person(), $u->getId_Profile(), $u->getId()]);
     }
-    
     public function delete(UsuarioClass $id){
-      
+        return true;
+    }
+    public function deleteUsuario(UsuarioClass $id){
+        echo json_encode(["message" => "chegou aqui"]);
+        try {
+            $sql = "DELETE FROM users WHERE id = :id";
+            $stmt = $this->pdo->prepare($sql);
+            $idValue = $id->getId();
+            $stmt->bindParam(':id', $idValue);
+            $stmt->execute();
+            echo "Usuário Deletado";
+        } catch(PDOException $e) {
+            echo "Erro ao Excluir Usuário: " . $e->getMessage();
+        }
     }
 
     private function emailExists($email) {
@@ -146,7 +158,12 @@ class UsuarioActions implements UsuarioDAO {
             $usuario->setId_Person($data['id_person']);
 
             $usuarioDAO->adicionarUsuario($usuario);
-        }
+        } else if (isset($data['action']) && $data['action'] === 'deleteUsuario' ) {
+            $usuarioDAO = new UsuarioActions($pdo); 
+            $usuario = new UsuarioClass();
+            $usuario->setId($data['id']); 
+            $usuarioDAO->deleteUsuario($usuario);
+        }  
     }
 
 ?>
