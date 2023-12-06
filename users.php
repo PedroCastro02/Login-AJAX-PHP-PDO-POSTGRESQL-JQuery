@@ -35,19 +35,14 @@ WHERE p.active = true");
 if($sqlUsers->rowCount() > 0){
     $ListaUsers = $sqlUsers->fetchAll(PDO::FETCH_ASSOC);
 }
-$ListaTurnos = [];
-$sqlTurnos = $pdo->query('SELECT p.name, p.id FROM people p WHERE p.active = true');
-if($sqlTurnos->rowCount() > 0){
-    $ListaTurnos = $sqlTurnos->fetchAll(PDO::FETCH_ASSOC);
-}
-$ListaIdShift = [];
-$sqlIdShifts = $pdo->query('SELECT * FROM shifts');
-if($sqlIdShifts->rowCount() > 0){
-    $ListaIdShift = $sqlIdShifts->fetchAll(PDO::FETCH_ASSOC);
+$ListaPeople = [];
+$sqlPeople = $pdo->query('SELECT p.name, p.id FROM people p WHERE p.active = true');
+if($sqlPeople->rowCount() > 0){
+    $ListaPeople = $sqlPeople->fetchAll(PDO::FETCH_ASSOC);
 }
 
 $ListaProfile = [];
-$sqlProfiles = $pdo->query('SELECT p.profile FROM profiles p');
+$sqlProfiles = $pdo->query('SELECT p.profile, p.id, u.id_profile FROM profiles p JOIN users u on p.id = u.id_profile');
 if($sqlProfiles->rowCount() > 0){
     $ListaProfile = $sqlProfiles->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -221,8 +216,8 @@ if($sqlProfiles->rowCount() > 0){
                                                     <label for="id_person">Nome<span class="red-asterisk">*</span></label>
                                                     <select class="form-select"  class="inputs" aria-label="Default select example" id="id_person">
                                                         <option selected>Selecione o Nome</option>
-                                                        <?php foreach ($ListaTurnos as $turnos): ?>
-                                                            <option value="<?= $turnos['id']; ?>"> <?= $turnos['name']; ?></option>
+                                                        <?php foreach ($ListaPeople as $people): ?>
+                                                            <option value="<?= $people['id']; ?>"> <?= $people['name']; ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
@@ -235,7 +230,7 @@ if($sqlProfiles->rowCount() > 0){
                                                     <select class="form-select"  class="inputs" aria-label="Default select example" id="id_profile">
                                                         <option selected>Selecione o Perfil<span class="red-asterisk">*</span></option>
                                                         <?php foreach ($ListaProfile as $profile): ?>
-                                                            <option value="<?= $profile['profile']; ?>"> <?= $profile['profile']; ?></option>
+                                                            <option value="<?= $profile['id_profile']; ?>"> <?= $profile['profile']; ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
@@ -265,7 +260,7 @@ if($sqlProfiles->rowCount() > 0){
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-botao" onclick="saveFuncionarios()">Adicionar</button>
+                                <button type="button" class="btn btn-botao" onclick="saveUsuarios()">Adicionar</button>
                             </div>
                             <!-- //? MODAIS DE SUCESSO e FALHA -->
                             <div class="modal fade bd-example" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="successModal">
@@ -326,15 +321,15 @@ if($sqlProfiles->rowCount() > 0){
                 </thead>
                 <tbody>
                     <?php foreach ($ListaUsers as $usersJOIN): ?>
-                    <tr>
-                        <td><?= $usersJOIN['id'];?></td>
-                        <td><a href="editar.php?id=<?= $usersJOIN['id'];?>"><i class="fas fa-solid fa-pen" style="color: #082b68; margin-left:30%;"></i></a></td>
-                        <td><?= $usersJOIN['name'];?></td>
-                        <td><?= $usersJOIN['username'];?></td>
-                        <td><?= $usersJOIN['profile'];?></td>
-                        <td><?= $usersJOIN['email'];?></td>
-                        <td><span style="cursor: pointer;" onclick="deleteFuncionario(<?= $usersJOIN['id'];?>)"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></span></td>
-                    </tr>
+                        <tr>
+                            <td><?= $usersJOIN['id'];?></td>
+                            <td><a href="editar.php?id=<?= $usersJOIN['id'];?>"><i class="fas fa-solid fa-pen" style="color: #082b68; margin-left:30%;"></i></a></td>
+                            <td><?= $usersJOIN['name'];?></td>
+                            <td><?= $usersJOIN['username'];?></td>
+                            <td><?= $usersJOIN['profile'];?></td>
+                            <td><?= $usersJOIN['email'];?></td>
+                            <td><span style="cursor: pointer;" onclick="deleteFuncionario(<?= $usersJOIN['id'];?>)"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></span></td>
+                        </tr>
                     <?php endforeach; ?>
                     </tbody>
                     </table>
@@ -359,32 +354,35 @@ if($sqlProfiles->rowCount() > 0){
         });
 
         function saveUsuarios(){
-            var name = $('#name').val();
+            var id_person = $('#id_person').val();
             var username = $('#username').val();
-            var profile = $('#id_profile').val();
+            var id_profile = $('#id_profile').val();
             var email = $('#email').val();
             var password = $('#password').val();
+            var id_company = 1;
         $.ajax ({
                 type: 'POST',
                 url : 'actions/UsuarioActions.php',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     action: 'saveUsuarios',
-                    name: name,
+                    id_person: id_person,
                     username: username,
-                    profile: profile,
+                    id_profile: id_profile,
                     email: email,
-                    password: password
+                    password: password,
+                    id_company: id_company
                 }),
                 success: function(data) {
-                    if(data === "Funcionário adicionado com sucesso!!") {
-                        $('#successModal').modal('show');
-                    } else if (data === "Erro ao adicionar funcionário") {
-                        $('#ErrorModal').modal('show');
-                    }
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
+                    // if(data === "Funcionário adicionado com sucesso!!") {
+                    //     $('#successModal').modal('show');
+                    // } else if (data === "Erro ao adicionar funcionário") {
+                    //     $('#ErrorModal').modal('show');
+                    // }
+                    // setTimeout(function() {
+                    //     location.reload();
+                    // }, 2000);
+                    console.log("sucessos")
                 },
                 error: function(xhr, textStatus, error) {
                     console.log(xhr, textStatus, error);

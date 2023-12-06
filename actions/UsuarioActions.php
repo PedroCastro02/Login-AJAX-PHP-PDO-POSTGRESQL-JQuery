@@ -38,7 +38,29 @@ class UsuarioActions implements UsuarioDAO {
         }
     }
     public function adicionarUsuario(UsuarioClass $u) {
-
+        $flag = 0;
+        if ($this->usernameExists($u->getUsername())) {
+            echo "Username ja esta em uso!";
+            $flag = 2;
+            return $flag;
+        
+        } elseif ($this->emailExists($u->getEmail())) {
+            echo "Email ja esta em uso!";
+            $flag = 1;
+            return $flag;
+        } elseif($flag == 2){
+            echo "Username e Email ja estão em uso!";
+        }else {
+            try {
+                $hashedPassword = password_hash($u->getPassword(), PASSWORD_BCRYPT);
+                $sql = "INSERT INTO users (email, username, password, id_company, id_person, id_profile) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([$u->getEmail(), $u->getUsername(), $hashedPassword, $u->getId_Company(), $u->getId_Person(), $u->getId_Profile()]);
+                echo "Usuário cadastrado com sucesso!";
+            } catch (PDOException $e) {
+                echo "Erro ao cadastrar usuário1: " . $e->getMessage();
+            }
+        }
     }
     
     public function findAll(){
@@ -123,7 +145,7 @@ class UsuarioActions implements UsuarioDAO {
             $usuario->setId_Profile($data['id_profile']);
             $usuario->setId_Person($data['id_person']);
 
-            $usuarioDAO->add($usuario);
+            $usuarioDAO->adicionarUsuario($usuario);
         }
     }
 
