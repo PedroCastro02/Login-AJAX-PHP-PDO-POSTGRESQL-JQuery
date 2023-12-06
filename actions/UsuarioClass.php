@@ -63,6 +63,7 @@ class UsuarioClass {
 
 Interface UsuarioDAO {
     public function add(UsuarioClass $u);
+    public function adicionarUsuario(UsuarioClass $u);
     public function findAll();
     public function findById($id);
     public function update(UsuarioClass $u);

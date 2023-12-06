@@ -37,6 +37,9 @@ class UsuarioActions implements UsuarioDAO {
             }
         }
     }
+    public function adicionarUsuario(UsuarioClass $u) {
+
+    }
     
     public function findAll(){
         $usuarios = array();
@@ -79,7 +82,7 @@ class UsuarioActions implements UsuarioDAO {
         $count = $stmt->fetchColumn();
 
         return $count > 0;
-        }
+    }
 
     private function usernameExists($username) {
         $sql = "SELECT COUNT(*) FROM users WHERE username = ?";
@@ -93,6 +96,23 @@ class UsuarioActions implements UsuarioDAO {
         $data = json_decode(file_get_contents('php://input'), true);
 
         if (isset($data['action']) && $data['action'] === 'saveRecords') {
+            $usuarioDAO = new UsuarioActions($pdo); 
+
+            $usuario = new UsuarioClass();
+            $usuario->setEmail($data['email']);
+            $usuario->setUsername($data['username']);
+            $usuario->setPassword($data['password']);
+            $usuario->setId_Company($data['id_company']);
+            $usuario->setId_Profile($data['id_profile']);
+            $usuario->setId_Person($data['id_person']);
+
+            $usuarioDAO->add($usuario);
+        }
+    }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($data['action']) && $data['action'] === 'saveUsuarios') {
             $usuarioDAO = new UsuarioActions($pdo); 
 
             $usuario = new UsuarioClass();

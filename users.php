@@ -27,6 +27,14 @@ if (!empty($_GET['search'])) {
     
 }
 
+$ListaUsers = [];
+$sqlUsers = $pdo->query("SELECT u.id, u.email, u.username, pr.profile, p.name FROM users u
+JOIN people p on p.id = u.id_person
+JOIN profiles pr on u.id_profile = pr.id
+WHERE p.active = true");
+if($sqlUsers->rowCount() > 0){
+    $ListaUsers = $sqlUsers->fetchAll(PDO::FETCH_ASSOC);
+}
 $ListaTurnos = [];
 $sqlTurnos = $pdo->query('SELECT p.name, p.id FROM people p WHERE p.active = true');
 if($sqlTurnos->rowCount() > 0){
@@ -37,6 +45,13 @@ $sqlIdShifts = $pdo->query('SELECT * FROM shifts');
 if($sqlIdShifts->rowCount() > 0){
     $ListaIdShift = $sqlIdShifts->fetchAll(PDO::FETCH_ASSOC);
 }
+
+$ListaProfile = [];
+$sqlProfiles = $pdo->query('SELECT p.profile FROM profiles p');
+if($sqlProfiles->rowCount() > 0){
+    $ListaProfile = $sqlProfiles->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 ?>
 
@@ -54,6 +69,8 @@ if($sqlIdShifts->rowCount() > 0){
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://cdn.datatables.net/v/dt/dt-1.13.7/datatables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
 
 
@@ -146,13 +163,19 @@ if($sqlIdShifts->rowCount() > 0){
     #SuccessDelete {
         background: rgba(0, 0, 0, 0.5); 
     }
+    .visivel {
+        display: none;
+    }
+    .invisivel {
+
+    }
     
    
 </style>
 <body>
 <?php include ('sidebar.php') ?>
     <div class="container-control">
-        <div class="titulo"><h2>Funcionários</h2></div>
+        <div class="titulo"><h2>Usuários</h2></div>
         <div class="container-control2">
             <div class="box-search">
                 <div class="input-control">
@@ -172,24 +195,24 @@ if($sqlIdShifts->rowCount() > 0){
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Adicionar novo funcionario</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Usuários</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                          <!-- //? conteudo  -->
                         <div class="modal-body">
                         <p>
                             <button class="btn btn-botao w-100" type="button" id="toggleButton">
-                            <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dados Do Funcionário <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
+                                <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dados Pessoais <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
                             </button>
                         </p>
-                        <!-- //? DADOS DO FUNCIONARIO collapse  -->
+                        <!-- //? DADOS DOS USUARIOS collapse  -->
                             <div id="myCollapse1" class="collapse">
                                 <div class="card card-body">
                                     <div class="dadosFuncionarios"> 
                                     <form method="POST">
                                         <div class="divDados1">
                                             <div class="Dados1Control d-flex">
-                                                
+
                                                 <div class="custom-form-control d-flex flex-column w-25">
                                                     <label for="id">Id</label>
                                                     <input class="inputs" type="number" name="id" id="id" readonly> 
@@ -204,89 +227,41 @@ if($sqlIdShifts->rowCount() > 0){
                                                     </select>
                                                 </div>
                                                 <div class="custom-form-control  d-flex flex-column  w-100">
-                                                    <label for="position">Cargo/Função<span class="red-asterisk">*</span></label>
-                                                    <input  class="inputs" type="text" name="position" id="position" required>
+                                                    <label for="username">Username<span class="red-asterisk">*</span></label>
+                                                    <input  class="inputs" type="text" name="username" id="username" required>
                                                 </div>
-                                            </div>
-                                            <div class="Dados1Control d-flex mt-2">
-                                                
-                                                <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="dt_hiring">Data Da Contratação<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="date" name="dt_hiring" id="dt_hiring" required>
-                                                </div>
-                                                <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="real_wage">Salário Real<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="number" name="real_wage" id="real_wage" required>
-                                                </div>
-                                                <div class="custom-form-control  d-flex flex-column w-50">
-                                                    <label for="fiscal_wage">Salário fiscal<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="text" name="fiscal_wage" id="fiscal_wage" required>
-                                                </div>
-                                            </div>
-                                            <div class="Dados1Control d-flex mt-2">
-                                                    <div class="custom-form-control d-flex flex-column">
-                                                        <label for="id_shift">Turnos<span class="red-asterisk">*</span></label>
-                                                        <select class="form-select"  class="inputs" aria-label="Default select example" id="id_shift">
-                                                        <option selected>Selecione o Turnos</option>
-                                                        <?php foreach ($ListaIdShift as $Shifts): ?>
-                                                            <option value="<?= $Shifts['id']; ?>"><?= $Shifts['shift']; ?></option>
+                                                <div class="custom-form-control d-flex flex-column  w-100">
+                                                    <label for="id_person">Perfil<span class="red-asterisk">*</span></label>
+                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="id_profile">
+                                                        <option selected>Selecione o Perfil<span class="red-asterisk">*</span></option>
+                                                        <?php foreach ($ListaProfile as $profile): ?>
+                                                            <option value="<?= $profile['profile']; ?>"> <?= $profile['profile']; ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
-                                                    </div>
                                                 </div>
+                                                
+                                            </div>
+                                            <div class="Dados1Control d-flex mt-2">
+                                                <div class="custom-form-control d-flex flex-column w-50">
+                                                    <label for="email">Email<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="email" name="email" id="email" required>
+                                                </div>
+                                                <div class="custom-form-control  d-flex flex-column w-50">
+                                                    <label for="password">Senha<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="password" name="password" id="password" required>
+                                                </div>
+                                                <div class="visibilidade" style="cursor: pointer; margin-top: 4.8%;">
+                                                    <span class="material-symbols-outlined visivel">visibility</span>
+                                                    <span class="material-symbols-outlined invisivel">visibility_off</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </form>
                                     </div> 
                                 </div>
                             </div>
                             <!-- //! FIM DO DADOS DO FUNCIONARIO collapse  -->
-                            <!-- //? DADOS DO DEPENDENTE collapse  -->
-                            <p>
-                                <button class="btn btn-botao w-100" type="button" id="toggleButton2">
-                                <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dependentes <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
-                                </button>
-                            </p>
-                            <div id="myCollapse2" class="collapse">
-                                <div class="card card-body">
-                                    <div class="dadosFuncionarios"> 
-                                    <form action="funcionarios.php" method="POST">
-                                        <div class="divDados1">
-                                            <div class="Dados1Control d-flex">
-                                                
-                                                <div class="custom-form-control d-flex flex-column">
-                                                    <label for="id">Id</label>
-                                                    <input class="inputs" type="number" name="id" id="id" readonly> 
-                                                </div>
-                                                <div class="custom-form-control d-flex flex-column  w-100">
-                                                    <label for="name">Nome<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="text" name="name" id="name" required>
-                                                </div>
-                                                <div class="custom-form-control  d-flex flex-column  w-100">
-                                                    <label for="position">Relação<span class="red-asterisk">*</span></label>
-                                                    <input  class="inputs" type="text" name="position" id="position" required>
-                                                </div>
-                                            </div>
-                                            <div class="Dados1Control d-flex mt-2">
-                                                
-                                                <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="dt_birth">Data De Nascimento<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="date" name="dt_birth" id="dt_birth" required>
-                                                </div>
-                                                <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="name">Telefone<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="phone" name="Nome" id="name" required>
-                                                </div>
-                                                <div class="custom-form-control">
-                                                    <button type="button" class="btn btn-botao">Remover Dependente</button>
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </form>
-                                    </div> 
-                                </div>
-                            </div>
-                            <!-- //! FIM DADOS DO DEPENDENTE collapse  -->
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -342,29 +317,23 @@ if($sqlIdShifts->rowCount() > 0){
                         <th>id</th>
                         <th>Editar</th>
                         <th>Nome</th>
-                        <th>Função</th>
-                        <th>Telefone</th>
-                        <th>Data Contratação</th>
-                        <th>Banco de horas</th>
-                        <th>Anexar documentos</th>
-                        <th>Vizualizar Funcionário</th>
+                        <th>Nome de Usuário</th>
+                        <th>Perfil</th>
+                        <th>E-mail</th>
                         <th>Apagar</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($listaJoin as $funcionariosJOIN): ?>
+                    <?php foreach ($ListaUsers as $usersJOIN): ?>
                     <tr>
-                        <td><?= $funcionariosJOIN['id'];?></td>
-                        <td><a href="editar.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-pen" style="color: #082b68; margin-left:30%;"></i></a></td>
-                        <td><?= $funcionariosJOIN['name'];?></td>
-                        <td><?= $funcionariosJOIN['position'];?></td>
-                        <td><?= $funcionariosJOIN['telephone'];?></td>
-                        <td><?= $funcionariosJOIN['dt_hiring'];?></td>
-                        <td><?= $funcionariosJOIN['balance_of_hours'];?></td>
-                        <td><a href="#"><i class="fas fa-paperclip" style="color: #2f89fc; margin-left:30%;"></i></a></td>
-                        <td><a href="editar.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-eye" style="color: #000000; margin-left:30%;"></i></a></td>
-                        <td><span style="cursor: pointer;" onclick="deleteFuncionario(<?= $funcionariosJOIN['id'];?>)"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></span></td>
+                        <td><?= $usersJOIN['id'];?></td>
+                        <td><a href="editar.php?id=<?= $usersJOIN['id'];?>"><i class="fas fa-solid fa-pen" style="color: #082b68; margin-left:30%;"></i></a></td>
+                        <td><?= $usersJOIN['name'];?></td>
+                        <td><?= $usersJOIN['username'];?></td>
+                        <td><?= $usersJOIN['profile'];?></td>
+                        <td><?= $usersJOIN['email'];?></td>
+                        <td><span style="cursor: pointer;" onclick="deleteFuncionario(<?= $usersJOIN['id'];?>)"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></span></td>
                     </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -388,27 +357,24 @@ if($sqlIdShifts->rowCount() > 0){
                 pagingType: 'simple'
             });
         });
-        function saveFuncionarios(){
-            var id_person = $('#id_person').val();
-            var dt_hiring = $('#dt_hiring').val();
-            var fiscal_wage = $('#fiscal_wage').val();
-            var real_wage = $('#real_wage').val();
-            var position = $('#position').val();
-            var id_shift = $('#id_shift').val();
-            var balance_of_hours = $('#balance_of_hours').val();
+
+        function saveUsuarios(){
+            var name = $('#name').val();
+            var username = $('#username').val();
+            var profile = $('#id_profile').val();
+            var email = $('#email').val();
+            var password = $('#password').val();
         $.ajax ({
                 type: 'POST',
-                url : 'actions/FuncionariosAction.php',
+                url : 'actions/UsuarioActions.php',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    action: 'saveFuncionarios',
-                    id_person: id_person,
-                    dt_hiring: dt_hiring,
-                    fiscal_wage: fiscal_wage,
-                    real_wage: real_wage,
-                    position: position,
-                    id_shift: id_shift,
-                    balance_of_hours: balance_of_hours
+                    action: 'saveUsuarios',
+                    name: name,
+                    username: username,
+                    profile: profile,
+                    email: email,
+                    password: password
                 }),
                 success: function(data) {
                     if(data === "Funcionário adicionado com sucesso!!") {
@@ -426,12 +392,12 @@ if($sqlIdShifts->rowCount() > 0){
             }
         )}
 
-        function deleteFuncionario(id){
-            var confirmDelete = window.confirm("Você tem certeza que deseja excluir este funcionário?");
+        function deleteUsuario(id){
+            var confirmDelete = window.confirm("Você tem certeza que deseja excluir este usuário?");
             if(confirmDelete) {
                 $.ajax({
                     type: 'POST',
-                    url: 'actions/FuncionariosAction.php',
+                    url: 'actions/UsuarioActions.php',
                     contentType: 'application/json',
                     data: JSON.stringify({
                         action: 'deleteFuncionario',
@@ -493,8 +459,20 @@ if($sqlIdShifts->rowCount() > 0){
         window.location = 'funcionarios.php?search='+search.value;
     }
 //! _______________________________________________________
-        
+const visibility = document.querySelector('.visibilidade');
+    let inputPassword = document.getElementById('password')
 
+    visibility.addEventListener("click", function() {
+        if (inputPassword.type === "password") {
+            inputPassword.type = 'text';
+            document.querySelector('.visivel').style.display = 'inline'; // Exibe o ícone de visibilidade
+            document.querySelector('.invisivel').style.display = 'none';
+        } else {
+            inputPassword.type = 'password';
+            document.querySelector('.visivel').style.display = 'none'; // Oculta o ícone de visibilidade
+            document.querySelector('.invisivel').style.display = 'inline';
+        }
+    });
   </script>
 
 </html>
