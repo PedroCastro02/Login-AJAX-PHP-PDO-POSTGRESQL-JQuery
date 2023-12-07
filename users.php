@@ -155,14 +155,15 @@ if($sqlProfiles->rowCount() > 0){
     #ErrorModal {
         background: rgba(0, 0, 0, 0.5); 
     }
-    #SuccessDelete {
-        background: rgba(0, 0, 0, 0.5); 
-    }
+
     .visivel {
         display: none;
     }
     .invisivel {
 
+    }
+    .hidden {
+        display: none !important;
     }
     
    
@@ -196,12 +197,12 @@ if($sqlProfiles->rowCount() > 0){
                          <!-- //? conteudo  -->
                         <div class="modal-body">
                         <p>
-                            <button class="btn btn-botao w-100" type="button" id="toggleButton">
+                            <button class="btn btn-botao w-100" type="button" id="toggleButtonDadosPessoais">
                                 <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dados Pessoais <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
                             </button>
                         </p>
                         <!-- //? DADOS DOS USUARIOS collapse  -->
-                            <div id="myCollapse1" class="collapse">
+                            <div id="myCollapseDadosUsuarios" class="collapse">
                                 <div class="card card-body">
                                     <div class="dadosFuncionarios"> 
                                     <form method="POST">
@@ -280,7 +281,7 @@ if($sqlProfiles->rowCount() > 0){
                                     <div class="text-center" style="font-size: 24px;">
                                         <i class="fas fa-times-circle fa-3x mb-4"></i>
                                         <br>
-                                        Erro ao adicionar Funcionário.
+                                        Erro ao adicionar Usuario.
                                     </div>
                                     </div>
                                 </div>
@@ -288,14 +289,15 @@ if($sqlProfiles->rowCount() > 0){
                             <div class="modal fade bd-example" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="SuccessDelete">
                                 <div class="modal-dialog modal-dialog-centered d-flex justify-content-center align-items-center">
                                     <div class="modal-content d-flex justify-content-center align-items-center flex-column text-danger" id="conteudo-sucesso-modal" style="height: 250px; width: 375px;">
-                                    <div class=" text-success text-center" style="font-size: 24px;">
-                                        <i class="fas fa-check-circle fa-3x mb-4"></i>
-                                        <br>
-                                        Funcionário deletado com sucesso
-                                    </div>
+                                        <div class="text-success text-center" style="font-size: 24px;">
+                                            <i class="fas fa-check-circle fa-3x mb-4"></i>
+                                            <br>
+                                            Usuario deletado com sucesso
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                             </div>
+
 
                             <!-- //! FIM MODAIS DE SUCESSO E FALHA -->
 
@@ -352,7 +354,37 @@ if($sqlProfiles->rowCount() > 0){
                 pagingType: 'simple'
             });
         });
+        function deleteUsuario(id) {
+            var confirmDelete = window.confirm("Você tem certeza que deseja excluir este usuário?");
+            if (confirmDelete) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'actions/UsuarioActions.php',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        action: 'deleteUsuario',
+                        id: id,
+                    }),
+                    success: function(data) {
+                        if(data === "Usuario Deletado") {
+                            $('#SuccessDelete').modal('show');
+                        } else if (data === "Erro ao Excluir Usuário") {
+                            $('#ErrorModal').modal('show');
+                        }
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    },
+                    error: function (xhr, textStatus, error) {
+                        console.log(xhr, textStatus, error);
+                    }
+                });
+            }
+        }
 
+        
+        
+                   
         function saveUsuarios(){
             var id_person = $('#id_person').val();
             var username = $('#username').val();
@@ -382,7 +414,6 @@ if($sqlProfiles->rowCount() > 0){
                     setTimeout(function() {
                         location.reload();
                     }, 2000);
-                    console.log("sucessos")
                 },
                 error: function(xhr, textStatus, error) {
                     console.log(xhr, textStatus, error);
@@ -390,31 +421,7 @@ if($sqlProfiles->rowCount() > 0){
             }
         )}
 
-        function deleteUsuario(id){
-            var confirmDelete = window.confirm("Você tem certeza que deseja excluir este usuário?");
-            if(confirmDelete) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'actions/UsuarioActions.php',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        action: 'deleteUsuario',
-                        id: id,
-                    }),
-                    success: function(data) {
-                    //     $('#SuccessDelete').modal('show');
-                    //     setTimeout(function() {
-                    //     location.reload();
-                    // }, 2000);
-                    console.log("deletes");
-                    },
-                    error: function(xhr, textStatus, error) {
-                        console.log(xhr, textStatus, error);
-                    },
-                });
-            }
-        }
-        
+       
         
                
 
@@ -436,15 +443,11 @@ if($sqlProfiles->rowCount() > 0){
         });
     });
     $(document).ready(function() {
-            $('#toggleButton').on('click', function() {
-                $('#myCollapse1').slideToggle();
+            $('#toggleButtonDadosPessoais').on('click', function() {
+                $('#myCollapseDadosUsuarios').slideToggle();
             });
         });
-    $(document).ready(function() {
-        $('#toggleButton2').on('click', function() {
-            $('#myCollapse2').slideToggle();
-        });
-    });
+    
     
 //! _______________________________________________________________
     let search = document.getElementById('filtrar');
@@ -458,7 +461,7 @@ if($sqlProfiles->rowCount() > 0){
         window.location = 'funcionarios.php?search='+search.value;
     }
 //! _______________________________________________________
-const visibility = document.querySelector('.visibilidade');
+    const visibility = document.querySelector('.visibilidade');
     let inputPassword = document.getElementById('password')
 
     visibility.addEventListener("click", function() {

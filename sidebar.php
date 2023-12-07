@@ -14,7 +14,7 @@
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-   
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script src="assets/js/jQuery/jquery-3.5.1.min.js"></script>
 </head>
@@ -174,6 +174,7 @@
   font-weight: 700;
 }
 
+
 </style>
 
 <body>
@@ -190,10 +191,16 @@
       </div>
       <ul class="list-items">
          <li><a href="home.php"><i class="fas fa-home"></i>Home</a></li>
-         <li><a href="#"><i class="fas fa-sliders-h"></i>Clients</a></li>
-         <li><a href="funcionarios.php"><i class="fas fa-address-book"></i>Funcionários</a></li>
-         <li><a href="pessoas.php"><i class="fas fa-user"></i>Pessoas</a></li>
-         <li><a href="users.php"><i class="fas fa-solid fa-users"></i>Usuários</a></li>
+              <button class="btn" type="button" id="toggleButton">
+                <li style="margin-left: -10px;"><a href="#"><i class="fas fa-solid fa-clipboard"></i>Cadastros    <i class="fa-solid fa-arrow-down fa-bounce"></i></a></li>
+              </button>
+          <div id="myCollapseSideBar" class="collapse">
+            <div class="card card-body" style="background: #4c4c4c;">
+                    <li><a href="funcionarios.php"><i class="fas fa-address-book"></i>Funcionários</a></li>
+                    <li><a href="pessoas.php"><i class="fas fa-user"></i>Pessoas</a></li>
+                    <li><a href="users.php"><i class="fas fa-solid fa-users"></i>Usuários</a></li>
+            </div>
+          </div>
          <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
          <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li>
          <div class="icons">
@@ -220,7 +227,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script>
 
-
-
+      $(document).ready(function() {
+              $('#toggleButton').on('click', function() {
+                  $('#myCollapseSideBar').slideToggle();
+              });
+          });
+      
     </script>
 </html>

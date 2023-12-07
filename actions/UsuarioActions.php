@@ -96,16 +96,15 @@ class UsuarioActions implements UsuarioDAO {
         return true;
     }
     public function deleteUsuario(UsuarioClass $id){
-        echo json_encode(["message" => "chegou aqui"]);
         try {
             $sql = "DELETE FROM users WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
             $idValue = $id->getId();
             $stmt->bindParam(':id', $idValue);
             $stmt->execute();
-            echo "Usuário Deletado";
+            echo "Usuario Deletado";
         } catch(PDOException $e) {
-            echo "Erro ao Excluir Usuário: " . $e->getMessage();
+            echo "Erro ao Excluir Usuário" . $e->getMessage();
         }
     }
 
@@ -158,6 +157,7 @@ class UsuarioActions implements UsuarioDAO {
             $usuario->setId_Person($data['id_person']);
 
             $usuarioDAO->adicionarUsuario($usuario);
+            
         } else if (isset($data['action']) && $data['action'] === 'deleteUsuario' ) {
             $usuarioDAO = new UsuarioActions($pdo); 
             $usuario = new UsuarioClass();

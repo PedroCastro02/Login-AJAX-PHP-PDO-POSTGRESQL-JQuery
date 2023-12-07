@@ -178,12 +178,12 @@ if($sqlIdShifts->rowCount() > 0){
                          <!-- //? conteudo  -->
                         <div class="modal-body">
                         <p>
-                            <button class="btn btn-botao w-100" type="button" id="toggleButton">
+                            <button class="btn btn-botao w-100" type="button" id="toggleButtonFuncionarios">
                             <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dados Do Funcionário <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
                             </button>
                         </p>
                         <!-- //? DADOS DO FUNCIONARIO collapse  -->
-                            <div id="myCollapse1" class="collapse">
+                            <div id="myCollapseFuncionarios" class="collapse">
                                 <div class="card card-body">
                                     <div class="dadosFuncionarios"> 
                                     <form method="POST">
@@ -242,11 +242,11 @@ if($sqlIdShifts->rowCount() > 0){
                             <!-- //! FIM DO DADOS DO FUNCIONARIO collapse  -->
                             <!-- //? DADOS DO DEPENDENTE collapse  -->
                             <p>
-                                <button class="btn btn-botao w-100" type="button" id="toggleButton2">
+                                <button class="btn btn-botao w-100" type="button" id="toggleButtonDependentes">
                                 <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dependentes <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
                                 </button>
                             </p>
-                            <div id="myCollapse2" class="collapse">
+                            <div id="myCollapseDependentes" class="collapse">
                                 <div class="card card-body">
                                     <div class="dadosFuncionarios"> 
                                     <form action="funcionarios.php" method="POST">
@@ -471,13 +471,13 @@ if($sqlIdShifts->rowCount() > 0){
         });
     });
     $(document).ready(function() {
-            $('#toggleButton').on('click', function() {
-                $('#myCollapse1').slideToggle();
+            $('#toggleButtonFuncionarios').on('click', function() {
+                $('#myCollapseFuncionarios').slideToggle();
             });
         });
     $(document).ready(function() {
-        $('#toggleButton2').on('click', function() {
-            $('#myCollapse2').slideToggle();
+        $('#toggleButtonDependentes').on('click', function() {
+            $('#myCollapseDependentes').slideToggle();
         });
     });
     
