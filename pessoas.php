@@ -141,14 +141,14 @@ if ($sqlPeopleTela->rowCount() > 0) {
         background: rgba(0, 0, 0, 0.5); 
     }
     .ativo {
-    color: #2fa83b !important; /* verde */
-    font-weight: bolder !important;
-    background-color: #a6eaad !important;
+        color: #2fa83b !important; /* verde */
+        font-weight: bolder !important;
+        background-color: #a6eaad !important;
     }
     .inativo {
-    color: red !important; /* vermelho */
-    font-weight: bolder !important;
-    background-color: #eac8c2 !important;
+        color: red !important; /* vermelho */
+        font-weight: bolder !important;
+        background-color: #eac8c2 !important;
     }
     
    
@@ -167,7 +167,6 @@ if ($sqlPeopleTela->rowCount() > 0) {
                             <option value="ativo" >Ativo</option>
                             <option value="inativo" >Inativo</option>
                         </select>
-
                     <div class="buttons">
                         <button class="btn btn-botao" onclick="searchData()">Buscar</button>
                         <button class="btn btn-botao" onclick="limparInput()">Limpar</button>
@@ -176,25 +175,25 @@ if ($sqlPeopleTela->rowCount() > 0) {
                 <div class="adicionar">
                     <button class="btn btn-botao" data-bs-toggle="modal" data-bs-target="#exampleModal">adicionar</button>
                 </div>
-                <!-- //? modal para adicionar funcionario  -->
+                <!-- //? modal para adicionar CADASTRAR PESSOAS -->
                 <!-- Vertically centered modal -->
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Adicionar novo funcionario</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar Pessoas</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                          <!-- //? conteudo  -->
                         <div class="modal-body">
                         <p>
-                            <button class="btn btn-botao w-100" type="button" id="toggleButton">
-                            <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dados Do Funcionário <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
+                            <button class="btn btn-botao w-100" type="button" id="toggleButtonDadosPessoais">
+                                <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dados Pessoais <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
                             </button>
                         </p>
-                        <!-- //? DADOS DO FUNCIONARIO collapse  -->
-                            <div id="myCollapse1" class="collapse">
+                        <!-- //? DADOS PESSOAIS collapse  -->
+                            <div id="myCollapseDadosPessoais" class="collapse">
                                 <div class="card card-body">
                                     <div class="dadosFuncionarios"> 
                                     <form method="POST">
@@ -205,59 +204,133 @@ if ($sqlPeopleTela->rowCount() > 0) {
                                                     <label for="id">Id</label>
                                                     <input class="inputs" type="number" name="id" id="id" readonly> 
                                                 </div>
-                                                <div class="custom-form-control d-flex flex-column  w-100">
-                                                    <label for="id_person">Nome<span class="red-asterisk">*</span></label>
-                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="id_person">
-                                                        <option selected>Selecione o Nome</option>
-                                                        <?php foreach ($ListaTurnos as $turnos): ?>
-                                                            <option value="<?= $turnos['id']; ?>"> <?= $turnos['name']; ?></option>
-                                                        <?php endforeach; ?>
-                                                    </select>
-                                                </div>
                                                 <div class="custom-form-control  d-flex flex-column  w-100">
-                                                    <label for="position">Cargo/Função<span class="red-asterisk">*</span></label>
-                                                    <input  class="inputs" type="text" name="position" id="position" required>
+                                                    <label for="name">Nome<span class="red-asterisk">*</span></label>
+                                                    <input  class="inputs" type="text" name="name" id="name" required>
+                                                </div>
+                                                <div class="custom-form-control d-flex flex-column  w-25">
+                                                    <label for="id_person">Tipo Pessoa<span class="red-asterisk">*</span></label>
+                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="id_person">
+                                                            <option value="PF"> PF </option>
+                                                            <option value="PJ"> PJ </option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="Dados1Control d-flex mt-2">
                                                 
                                                 <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="dt_hiring">Data Da Contratação<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="date" name="dt_hiring" id="dt_hiring" required>
+                                                    <label for="document">Documento<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="number" name="document" id="document" required>
                                                 </div>
                                                 <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="real_wage">Salário Real<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="number" name="real_wage" id="real_wage" required>
+                                                    <label for="telephone">Telefone<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="phone" name="telephone" id="telephone" required>
                                                 </div>
                                                 <div class="custom-form-control  d-flex flex-column w-50">
-                                                    <label for="fiscal_wage">Salário fiscal<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="text" name="fiscal_wage" id="fiscal_wage" required>
+                                                    <label for="dt_birth">Data Nascimento<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="date" name="dt_birth" id="dt_birth" required>
                                                 </div>
                                             </div>
-                                            <div class="Dados1Control d-flex mt-2">
-                                                    <div class="custom-form-control d-flex flex-column">
-                                                        <label for="id_shift">Turnos<span class="red-asterisk">*</span></label>
-                                                        <select class="form-select"  class="inputs" aria-label="Default select example" id="id_shift">
-                                                        <option selected>Selecione o Turnos</option>
-                                                        <?php foreach ($ListaIdShift as $Shifts): ?>
-                                                            <option value="<?= $Shifts['id']; ?>"><?= $Shifts['shift']; ?></option>
-                                                        <?php endforeach; ?>
-                                                    </select>
-                                                    </div>
-                                                </div>
                                         </div>
                                     </form>
                                     </div> 
                                 </div>
                             </div>
-                            <!-- //! FIM DO DADOS DO FUNCIONARIO collapse  -->
-                            <!-- //? DADOS DO DEPENDENTE collapse  -->
+                            <!-- //! FIM DO DADOS PESSOAIS collapse  -->
+                            <!-- //? DADOS DE ENDEREÇOS collapse  -->
                             <p>
-                                <button class="btn btn-botao w-100" type="button" id="toggleButton2">
-                                <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Dependentes <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
+                                <button class="btn btn-botao w-100" type="button" id="toggleButtonEnderencos">
+                                <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Endereços <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
                                 </button>
                             </p>
-                            <div id="myCollapse2" class="collapse">
+                            <div id="myCollapseEnderecos" class="collapse">
+                                <div class="card card-body">
+                                    <div class="dadosFuncionarios"> 
+                                    <form action="funcionarios.php" method="POST">
+                                        <div class="divDados1">
+                                            <div class="Dados1Control d-flex">
+                                                
+                                                <div class="custom-form-control d-flex flex-column">
+                                                    <label for="id">Id</label>
+                                                    <input class="inputs" type="number" name="id" id="id" readonly> 
+                                                </div>
+                                                <div class="custom-form-control d-flex flex-column w-25">
+                                                    <label for="zip_code">CEP<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="text" name="zip_code" id="zip_code" required>
+                                                </div>
+                                                <div class="custom-form-control  d-flex flex-column  w-25">
+                                                    <label for="street">Rua<span class="red-asterisk">*</span></label>
+                                                    <input  class="inputs" type="text" name="street" id="street" required>
+                                                </div>
+                                                <div class="custom-form-control  d-flex flex-column  w-25">
+                                                    <label for="number">Número<span class="red-asterisk">*</span></label>
+                                                    <input  class="inputs" type="text" name="number" id="number" required>
+                                                </div>
+                                                <div class="custom-form-control  d-flex flex-column  w-25">
+                                                    <label for="district">Bairro<span class="red-asterisk">*</span></label>
+                                                    <input  class="inputs" type="text" name="district" id="district" required>
+                                                </div>
+                                            </div>
+                                            <div class="Dados1Control d-flex mt-2">
+                                                
+                                                <div class="custom-form-control d-flex flex-column w-50">
+                                                    <label for="complement">Complemento<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="text" name="complement" id="complement" required>
+                                                </div>
+                                                <div class="custom-form-control d-flex flex-column w-50">
+                                                    <label for="city">Cidade<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="phone" name="city" id="city" required>
+                                                </div>
+                                                <div class="custom-form-control d-flex flex-column  w-25">
+                                                    <label for="id_person">Tipo Pessoa<span class="red-asterisk">*</span></label>
+                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="id_person">
+                                                            <option value="AC">AC</option>
+                                                            <option value="AL">AL</option>
+                                                            <option value="AP">AP</option>
+                                                            <option value="AM">AM</option>
+                                                            <option value="BA">BA</option>
+                                                            <option value="CE">CE</option>
+                                                            <option value="DF">DF</option>
+                                                            <option value="ES">ES</option>
+                                                            <option value="GO">GO</option>
+                                                            <option value="MA">MA</option>
+                                                            <option value="MT">MT</option>
+                                                            <option value="MS">MS</option>
+                                                            <option value="MG">MG</option>
+                                                            <option value="PA">PA</option>
+                                                            <option value="PB">PB</option>
+                                                            <option value="PR">PR</option>
+                                                            <option value="PE">PE</option>
+                                                            <option value="PI">PI</option>
+                                                            <option value="RJ">RJ</option>
+                                                            <option value="RN">RN</option>
+                                                            <option value="RS">RS</option>
+                                                            <option value="RO">RO</option>
+                                                            <option value="RR">RR</option>
+                                                            <option value="SC">SC</option>
+                                                            <option value="SP">SP</option>
+                                                            <option value="SE">SE</option>
+                                                            <option value="TO">TO</option>
+                                                    </select>
+                                                </div>
+                                                <div class="custom-form-control">
+                                                    <button type="button" class="btn btn-botao">Remover Endereço</button>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </form>
+                                    </div> 
+                                </div>
+                            </div>
+                            <!-- //! FIM DADOS DE ENDEREÇOS collapse  -->
+                            <!-- //? DADOS DE EMAIL collapse  -->
+                            <p>
+                                <button class="btn btn-botao w-100" type="button" id="toggleButtonEmails">
+                                <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i> Emails <i class="fas fa-solid fa-arrow-down" style="color: #000000;"></i>
+                                </button>
+                            </p>
+                            <div id="myCollapseEmails" class="collapse">
                                 <div class="card card-body">
                                     <div class="dadosFuncionarios"> 
                                     <form action="funcionarios.php" method="POST">
@@ -269,35 +342,19 @@ if ($sqlPeopleTela->rowCount() > 0) {
                                                     <input class="inputs" type="number" name="id" id="id" readonly> 
                                                 </div>
                                                 <div class="custom-form-control d-flex flex-column  w-100">
-                                                    <label for="name">Nome<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="text" name="name" id="name" required>
-                                                </div>
-                                                <div class="custom-form-control  d-flex flex-column  w-100">
-                                                    <label for="position">Relação<span class="red-asterisk">*</span></label>
-                                                    <input  class="inputs" type="text" name="position" id="position" required>
-                                                </div>
-                                            </div>
-                                            <div class="Dados1Control d-flex mt-2">
-                                                
-                                                <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="dt_birth">Data De Nascimento<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="date" name="dt_birth" id="dt_birth" required>
-                                                </div>
-                                                <div class="custom-form-control d-flex flex-column w-50">
-                                                    <label for="name">Telefone<span class="red-asterisk">*</span></label>
-                                                    <input class="inputs" type="phone" name="Nome" id="name" required>
-                                                </div>
+                                                    <label for="email">Email<span class="red-asterisk">*</span></label>
+                                                    <input class="inputs" type="email" name="email" id="email" required>
+                                                </div>  
                                                 <div class="custom-form-control">
-                                                    <button type="button" class="btn btn-botao">Remover Dependente</button>
+                                                    <button type="button" class="btn btn-botao">Remover Email</button>
                                                 </div>
                                             </div>
-                                            
                                         </div>
                                     </form>
                                     </div> 
                                 </div>
                             </div>
-                            <!-- //! FIM DADOS DO DEPENDENTE collapse  -->
+                            <!-- //! FIM DADOS DE EMAIL collapse  -->
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -477,15 +534,20 @@ if ($sqlPeopleTela->rowCount() > 0) {
         });
     });
     $(document).ready(function() {
-            $('#toggleButton').on('click', function() {
-                $('#myCollapse1').slideToggle();
+            $('#toggleButtonDadosPessoais').on('click', function() {
+                $('#myCollapseDadosPessoais').slideToggle();
             });
         });
     $(document).ready(function() {
-        $('#toggleButton2').on('click', function() {
-            $('#myCollapse2').slideToggle();
+        $('#toggleButtonEnderencos').on('click', function() {
+            $('#myCollapseEnderecos').slideToggle();
         });
     });
+    $(document).ready(function() {
+            $('#toggleButtonEmails').on('click', function() {
+                $('#myCollapseEmails').slideToggle();
+            });
+        });
 
     $(document).ready(function () {
         $("#statusFilter").change(function () {
