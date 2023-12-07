@@ -209,8 +209,8 @@ if ($sqlPeopleTela->rowCount() > 0) {
                                                     <input  class="inputs" type="text" name="name" id="name" required>
                                                 </div>
                                                 <div class="custom-form-control d-flex flex-column  w-25">
-                                                    <label for="id_person">Tipo Pessoa<span class="red-asterisk">*</span></label>
-                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="id_person">
+                                                    <label for="person_type">Tipo Pessoa<span class="red-asterisk">*</span></label>
+                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="person_type" name="person_type">
                                                             <option value="PF"> PF </option>
                                                             <option value="PJ"> PJ </option>
                                                     </select>
@@ -282,8 +282,8 @@ if ($sqlPeopleTela->rowCount() > 0) {
                                                     <input class="inputs" type="phone" name="city" id="city" required>
                                                 </div>
                                                 <div class="custom-form-control d-flex flex-column  w-25">
-                                                    <label for="id_person">Tipo Pessoa<span class="red-asterisk">*</span></label>
-                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="id_person">
+                                                    <label for="state">Tipo Pessoa<span class="red-asterisk">*</span></label>
+                                                    <select class="form-select"  class="inputs" aria-label="Default select example" id="state" name="state">
                                                             <option value="AC">AC</option>
                                                             <option value="AL">AL</option>
                                                             <option value="AP">AP</option>
@@ -358,7 +358,7 @@ if ($sqlPeopleTela->rowCount() > 0) {
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-botao" onclick="saveFuncionarios()">Adicionar</button>
+                                <button type="button" class="btn btn-botao" onclick="savePessoas()">Adicionar</button>
                             </div>
                             <!-- //? MODAIS DE SUCESSO e FALHA -->
                             <div class="modal fade bd-example" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="successModal">
@@ -451,37 +451,52 @@ if ($sqlPeopleTela->rowCount() > 0) {
                 pagingType: 'simple'
             });
         });
-        function saveFuncionarios(){
-            var id_person = $('#id_person').val();
-            var dt_hiring = $('#dt_hiring').val();
-            var fiscal_wage = $('#fiscal_wage').val();
-            var real_wage = $('#real_wage').val();
-            var position = $('#position').val();
-            var id_shift = $('#id_shift').val();
-            var balance_of_hours = $('#balance_of_hours').val();
+        function savePessoas(){
+            var name = $('#name').val();
+            var person_type = $('#person_type').val();
+            var document = $('#document').val();
+            var telephone = $('#telephone').val();
+            var dt_birth = $('#dt_birth').val();
+            var zip_code = $('#zip_code').val();
+            var street = $('#street').val();
+            var number = $('#number').val();
+            var district = $('#district').val();
+            var complement = $('#complement').val();
+            var city = $('#city').val();
+            var state = $('#state').val();
+            var email = $('#email').val();
+            var id_company = 1;
         $.ajax ({
                 type: 'POST',
-                url : 'actions/FuncionariosAction.php',
+                url : 'actions/PessoasAction.php',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    action: 'saveFuncionarios',
-                    id_person: id_person,
-                    dt_hiring: dt_hiring,
-                    fiscal_wage: fiscal_wage,
-                    real_wage: real_wage,
-                    position: position,
-                    id_shift: id_shift,
-                    balance_of_hours: balance_of_hours
+                    action: 'savePessoas',
+                    name: name,
+                    document: document,
+                    telephone: telephone,
+                    person_type: person_type,
+                    dt_birth: dt_birth,
+                    zip_code: zip_code,
+                    street: street,
+                    number: number,
+                    district: district,
+                    complement: complement,
+                    city: city,
+                    state: state,
+                    email: email,
+                    id_company: id_company
                 }),
                 success: function(data) {
-                    if(data === "Funcionário adicionado com sucesso!!") {
-                        $('#successModal').modal('show');
-                    } else if (data === "Erro ao adicionar funcionário") {
-                        $('#ErrorModal').modal('show');
-                    }
-                    setTimeout(function() {
-                        location.reload();
-                    }, 2000);
+                    console.log(data);
+                    // if(data === "Funcionário adicionado com sucesso!!") {
+                    //     $('#successModal').modal('show');
+                    // } else if (data === "Erro ao adicionar funcionário") {
+                    //     $('#ErrorModal').modal('show');
+                    // }
+                    // setTimeout(function() {
+                    //     location.reload();
+                    // }, 2000);
                 },
                 error: function(xhr, textStatus, error) {
                     console.log(xhr, textStatus, error);
@@ -504,7 +519,7 @@ if ($sqlPeopleTela->rowCount() > 0) {
                         $('#SuccessDelete').modal('show');
                         setTimeout(function() {
                         location.reload();
-                    }, 2000);
+                    }, 1000);
                     },
                     error: function(xhr, textStatus, error) {
                         console.log(xhr, textStatus, error);

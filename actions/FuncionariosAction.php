@@ -42,8 +42,9 @@ class FuncionariosAction implements FuncionarioDAO {
     }
     
     public function delete(FuncionarioClass $id){
+        $dataAtual = date("Y-m-d");
         try {
-            $sql = "DELETE FROM employees WHERE id = :id";
+            $sql = "UPDATE employees SET deleted_at = '$dataAtual' WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
             $idValue = $id->getId();
             $stmt->bindParam(':id', $idValue);

@@ -4,10 +4,8 @@ include 'actions/FuncionariosAction.php';
 
 
 $listaJoin = [];
-
 $sqlJoin = $pdo->query("SELECT p.name, p.telephone, e.position, e.dt_hiring, e.balance_of_hours, e.id FROM employees e 
-JOIN people p ON e.id_person = p.id");
-
+JOIN people p ON e.id_person = p.id WHERE e.deleted_at is null");
 if ($sqlJoin->rowCount() > 0) {
     $listaJoin = $sqlJoin->fetchAll(PDO::FETCH_ASSOC);
 }

@@ -31,7 +31,7 @@ $ListaUsers = [];
 $sqlUsers = $pdo->query("SELECT u.id, u.email, u.username, pr.profile, p.name FROM users u
 JOIN people p on p.id = u.id_person
 JOIN profiles pr on u.id_profile = pr.id
-WHERE p.active = true");
+WHERE p.active = true AND u.deleted_at is null");
 if($sqlUsers->rowCount() > 0){
     $ListaUsers = $sqlUsers->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -413,7 +413,7 @@ if($sqlProfiles->rowCount() > 0){
                     }
                     setTimeout(function() {
                         location.reload();
-                    }, 2000);
+                    }, 1000);
                 },
                 error: function(xhr, textStatus, error) {
                     console.log(xhr, textStatus, error);

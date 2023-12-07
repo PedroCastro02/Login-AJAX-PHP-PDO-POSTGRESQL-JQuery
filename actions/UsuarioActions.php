@@ -96,8 +96,9 @@ class UsuarioActions implements UsuarioDAO {
         return true;
     }
     public function deleteUsuario(UsuarioClass $id){
+        $dataAtual = date("Y-m-d");
         try {
-            $sql = "DELETE FROM users WHERE id = :id";
+            $sql = "UPDATE users SET deleted_at = '$dataAtual' WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
             $idValue = $id->getId();
             $stmt->bindParam(':id', $idValue);
