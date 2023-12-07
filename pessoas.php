@@ -3,14 +3,6 @@ include ('connection/connection.php');
 include 'actions/FuncionariosAction.php';
 
 
-$listaJoin = [];
-
-$sqlJoin = $pdo->query("SELECT p.name, p.telephone, e.position, e.dt_hiring, e.balance_of_hours, e.id FROM employees e 
-JOIN people p ON e.id_person = p.id");
-
-if ($sqlJoin->rowCount() > 0) {
-    $listaJoin = $sqlJoin->fetchAll(PDO::FETCH_ASSOC);
-}
 if (!empty($_GET['search'])) {
     $data = $_GET['search'];
     $sql = "SELECT p.name, p.telephone, e.position, e.dt_hiring, e.balance_of_hours, e.id 
@@ -23,19 +15,13 @@ if (!empty($_GET['search'])) {
                OR e.balance_of_hours LIKE '%$data%' 
                OR e.dt_hiring LIKE '%$data%' 
             ORDER BY e.id DESC";
-} else {
-    
-}
+} 
 
-$ListaTurnos = [];
-$sqlTurnos = $pdo->query('SELECT p.name, p.id FROM people p WHERE p.active = true');
-if($sqlTurnos->rowCount() > 0){
-    $ListaTurnos = $sqlTurnos->fetchAll(PDO::FETCH_ASSOC);
-}
-$ListaIdShift = [];
-$sqlIdShifts = $pdo->query('SELECT * FROM shifts');
-if($sqlIdShifts->rowCount() > 0){
-    $ListaIdShift = $sqlIdShifts->fetchAll(PDO::FETCH_ASSOC);
+$ListaPeopleTela = [];
+$sqlPeopleTela = $pdo->query('SELECT p.id, p.name, p.telephone, p.person_type, p.active FROM people p');
+
+if ($sqlPeopleTela->rowCount() > 0) {
+    $ListaPeopleTela = $sqlPeopleTela->fetchAll(PDO::FETCH_ASSOC);
 }
 
 ?>
@@ -108,6 +94,14 @@ if($sqlIdShifts->rowCount() > 0){
         font-weight: 400;
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
     }
+    .btn.btn-status {
+        background: #eee; 
+        color: black;
+        font-weight: 400;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
     .btn-secondary {
         font-weight: 400;
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
@@ -146,6 +140,16 @@ if($sqlIdShifts->rowCount() > 0){
     #SuccessDelete {
         background: rgba(0, 0, 0, 0.5); 
     }
+    .ativo {
+    color: #2fa83b !important; /* verde */
+    font-weight: bolder !important;
+    background-color: #a6eaad !important;
+    }
+    .inativo {
+    color: red !important; /* vermelho */
+    font-weight: bolder !important;
+    background-color: #eac8c2 !important;
+    }
     
    
 </style>
@@ -157,6 +161,13 @@ if($sqlIdShifts->rowCount() > 0){
             <div class="box-search">
                 <div class="input-control">
                     <input type="search" class="form-control w-50 filtrar" id="filtrar" placeholder="Selecione um campo para filtrar">
+                    <label for="statusFilter"></label>
+                        <select class="btn btn-status" id="statusFilter">
+                            <option value="all" >Filtrar por status:</option>
+                            <option value="ativo" >Ativo</option>
+                            <option value="inativo" >Inativo</option>
+                        </select>
+
                     <div class="buttons">
                         <button class="btn btn-botao" onclick="searchData()">Buscar</button>
                         <button class="btn btn-botao" onclick="limparInput()">Limpar</button>
@@ -342,31 +353,26 @@ if($sqlIdShifts->rowCount() > 0){
                         <th>id</th>
                         <th>Editar</th>
                         <th>Nome</th>
-                        <th>Função</th>
                         <th>Telefone</th>
-                        <th>Data Contratação</th>
-                        <th>Banco de horas</th>
-                        <th>Anexar documentos</th>
-                        <th>Vizualizar Funcionário</th>
-                        <th>Apagar</th>
+                        <th>Tipo Pessoa</th>
+                        <th>Active</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($listaJoin as $funcionariosJOIN): ?>
-                    <tr>
-                        <td><?= $funcionariosJOIN['id'];?></td>
-                        <td><a href="editar.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-pen" style="color: #082b68; margin-left:30%;"></i></a></td>
-                        <td><?= $funcionariosJOIN['name'];?></td>
-                        <td><?= $funcionariosJOIN['position'];?></td>
-                        <td><?= $funcionariosJOIN['telephone'];?></td>
-                        <td><?= $funcionariosJOIN['dt_hiring'];?></td>
-                        <td><?= $funcionariosJOIN['balance_of_hours'];?></td>
-                        <td><a href="#"><i class="fas fa-paperclip" style="color: #2f89fc; margin-left:30%;"></i></a></td>
-                        <td><a href="editar.php?id=<?= $funcionariosJOIN['id'];?>"><i class="fas fa-solid fa-eye" style="color: #000000; margin-left:30%;"></i></a></td>
-                        <td><span style="cursor: pointer;" onclick="deleteFuncionario(<?= $funcionariosJOIN['id'];?>)"><i class="fas fa-solid fa-trash" style="color: #b91818; margin-left:30%;"></i></span></td>
+                <?php foreach ($ListaPeopleTela as $Peoples): ?>
+                    <?php
+                        $statusClass = $Peoples['active'] ? 'ativo' : 'inativo';
+                    ?>
+                    <tr class="active-row <?= $statusClass; ?>" data-status="<?= $statusClass; ?>">
+                        <td><?= $Peoples['id']; ?></td>
+                        <td><a href="editar.php?id=<?= $Peoples['id']; ?>"><i class="fas fa-solid fa-pen" style="color: #082b68; margin-left:30%;"></i></a></td>
+                        <td><?= $Peoples['name']; ?></td>
+                        <td><?= $Peoples['telephone']; ?></td>
+                        <td><?= $Peoples['person_type']; ?></td>
+                        <td><?= $Peoples['active'] ? 'Ativo' : 'Inativo'; ?></td>
                     </tr>
-                    <?php endforeach; ?>
+                <?php endforeach; ?>
                     </tbody>
                     </table>
             </div>
@@ -480,20 +486,21 @@ if($sqlIdShifts->rowCount() > 0){
             $('#myCollapse2').slideToggle();
         });
     });
-    
-//! _______________________________________________________________
-    let search = document.getElementById('filtrar');
-    search.addEventListener("keydown", function(event){
-        if (event.key === "Enter") {
-            search.data();
-        }
-    });
 
-    function searchData() {
-        window.location = 'funcionarios.php?search='+search.value;
-    }
-//! _______________________________________________________
-        
+    $(document).ready(function () {
+        $("#statusFilter").change(function () {
+            var selectedStatus = $(this).val();
+
+            if (selectedStatus === "all") {
+                $(".active-row").show();
+            } else {
+                $(".active-row").hide();
+                $(".active-row[data-status='" + selectedStatus + "']").show();
+            }
+        });
+    });
+    
+
 
   </script>
 

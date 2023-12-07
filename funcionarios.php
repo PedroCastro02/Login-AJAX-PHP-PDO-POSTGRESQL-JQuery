@@ -441,7 +441,7 @@ if($sqlIdShifts->rowCount() > 0){
                         $('#SuccessDelete').modal('show');
                         setTimeout(function() {
                         location.reload();
-                    }, 2000);
+                    }, 500);
                     },
                     error: function(xhr, textStatus, error) {
                         console.log(xhr, textStatus, error);

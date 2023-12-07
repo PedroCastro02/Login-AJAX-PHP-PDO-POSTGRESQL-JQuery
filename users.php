@@ -366,15 +366,15 @@ if($sqlProfiles->rowCount() > 0){
                         id: id,
                     }),
                     success: function(data) {
-                        if(data === "Usuario Deletado") {
-                            $('#SuccessDelete').modal('show');
-                        } else if (data === "Erro ao Excluir Usuário") {
-                            $('#ErrorModal').modal('show');
-                        }
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    },
+                if(data === "Usuario Deletado") {
+                    $('#SuccessDelete').modal('show');
+                } else if (data === "Erro ao Excluir Usuário") {
+                    $('#ErrorModal').modal('show');
+                }
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
                     error: function (xhr, textStatus, error) {
                         console.log(xhr, textStatus, error);
                     }
