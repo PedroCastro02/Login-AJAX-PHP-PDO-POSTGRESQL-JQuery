@@ -173,7 +173,9 @@
   font-size: 20px;
   font-weight: 700;
 }
-
+.btn .btnSlide {
+  width: 100%;
+}
 
 </style>
 
@@ -191,7 +193,7 @@
       </div>
       <ul class="list-items">
          <li><a href="home.php"><i class="fas fa-home"></i>Home</a></li>
-              <button class="btn" type="button" id="toggleButton">
+              <button class="btn btnSlide" type="button" id="toggleButton">
                 <li style="margin-left: -10px;"><a href="#"><i class="fas fa-solid fa-clipboard"></i>Cadastros    <i class="fa-solid fa-arrow-down fa-bounce"></i></a></li>
               </button>
           <div id="myCollapseSideBar" class="collapse">
@@ -201,7 +203,17 @@
                     <li><a href="users.php"><i class="fas fa-solid fa-users"></i>Usuários</a></li>
             </div>
           </div>
-         <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
+              <button class="btn" type="button" id="toggleButton2">
+                <li style="margin-left: -10px;"><a href="#"><i class="fas fa-regular fa-stopwatch"></i>Pontos    <i class="fa-solid fa-arrow-down fa-bounce"></i></a></li>
+              </button>
+          <div id="myCollapseSideBar2" class="collapse">
+            <div class="card card-body" style="background: #4c4c4c;">
+                    <li><a href="Turnos.php"><i class="fa-solid fa-clipboard-list"></i>Turnos</a></li>
+                    <li><a href="Batimento.php"><i class="fa-solid fa-user-clock"></i>Batimento</a></li>
+                    <li><a href="Faltas.php"><i class="fa-solid fa-calendar-xmark"></i>Faltas</a></li>
+            </div>
+          </div>
+         <li><a href="emObras.php"><i class="fa-solid fa-sack-dollar"></i>Financeiro</a></li>
          <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li>
          <div class="icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -230,6 +242,11 @@
       $(document).ready(function() {
               $('#toggleButton').on('click', function() {
                   $('#myCollapseSideBar').slideToggle();
+              });
+          });
+      $(document).ready(function() {
+              $('#toggleButton2').on('click', function() {
+                  $('#myCollapseSideBar2').slideToggle();
               });
           });
       
